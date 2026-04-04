@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PitchIQ — AI Cricket Technique Coach</title>
+<meta name="description" content="Free AI-powered cricket technique analysis. Get professional coaching feedback in seconds — no equipment, no cost, runs entirely on your device."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & TOKENS ─────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:       #050b14;
+  --bg2:      #070f1c;
+  --card:     #0c1929;
+  --card2:    #111f33;
+  --border:   rgba(255,255,255,0.06);
+  --border2:  rgba(255,255,255,0.11);
+  --teal:     #00d4aa;
+  --teal-d:   rgba(0,212,170,0.12);
+  --teal-g:   rgba(0,212,170,0.22);
+  --orange:   #ff6b2b;
+  --orange-d: rgba(255,107,43,0.12);
+  --amber:    #f59e0b;
+  --amber-d:  rgba(245,158,11,0.11);
+  --red:      #ef4444;
+  --red-d:    rgba(239,68,68,0.11);
+  --green:    #22c55e;
+  --green-d:  rgba(34,197,94,0.11);
+  --text:     #dceeff;
+  --muted:    #5a7a9a;
+  --muted2:   #304560;
+  --font-head:'Clash Display',system-ui,sans-serif;
+  --font-body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 22px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-weight:400;line-height:1.6;overflow-x:hidden}
+::selection{background:var(--teal-g);color:#fff}
+
+/* ── UTILITY ────────────────────────────────────────── */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+input[type=range]{-webkit-appearance:none;appearance:none;height:3px;background:var(--border2);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--teal);cursor:pointer;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25)}
+input[type=file]{display:none}
+
+/* ── SCROLLBAR ──────────────────────────────────────── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
+
+/* ── NAV ────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:64px;
+  background:rgba(5,11,20,0.82);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-mark{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-size:13px;font-weight:700;
+  color:var(--bg);letter-spacing:.02em;
+}
+.nav-name{font-family:var(--font-head);font-size:19px;font-weight:700;letter-spacing:.01em}
+.nav-name b{color:var(--teal)}
+.nav-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--teal-d);border:1px solid var(--teal-g);
+  border-radius:40px;padding:5px 13px;
+  font-size:11px;font-weight:600;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;
+}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2.2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.nav-cta{
+  background:var(--teal);color:var(--bg);
+  font-family:var(--font-body);font-size:13px;font-weight:600;
+  padding:9px 22px;border-radius:8px;letter-spacing:.02em;
+  transition:opacity .18s,transform .15s;
+}
+.nav-cta:hover{opacity:.85;transform:translateY(-1px)}
+
+/* ── HERO ────────────────────────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:flex-start;
+  padding:100px 48px 72px;position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 60%,rgba(0,212,170,.05) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 20%,rgba(255,107,43,.04) 0%,transparent 60%);
+}
+.hero-grid-bg{
+  position:absolute;inset:0;pointer-events:none;opacity:.025;
+  background-image:linear-gradient(var(--teal) 1px,transparent 1px),linear-gradient(90deg,var(--teal) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+.hero-inner{position:relative;z-index:1;max-width:820px}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:28px;
+  background:var(--teal-d);border:1px solid var(--teal-g);
+  border-radius:40px;padding:6px 14px;
+  font-size:11px;font-weight:600;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;
+}
+h1{
+  font-family:var(--font-head);
+  font-size:clamp(52px,7.5vw,108px);
+  font-weight:700;line-height:.93;letter-spacing:-.01em;
+  color:#fff;margin-bottom:28px;
+}
+h1 .hl{color:var(--teal)}
+h1 .hl2{color:var(--orange)}
+.hero-sub{
+  font-size:clamp(15px,1.6vw,18px);color:var(--muted);
+  line-height:1.7;max-width:520px;margin-bottom:44px;
+}
+.hero-sub strong{color:var(--text);font-weight:500}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:72px}
+.btn-main{
+  background:var(--teal);color:var(--bg);
+  font-family:var(--font-body);font-size:15px;font-weight:700;
+  padding:15px 36px;border-radius:10px;letter-spacing:.02em;
+  transition:opacity .18s,transform .15s;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-main:hover{opacity:.88;transform:translateY(-2px)}
+.btn-outline{
+  border:1px solid var(--border2);color:var(--text);
+  font-family:var(--font-body);font-size:15px;font-weight:400;
+  padding:14px 32px;border-radius:10px;
+  transition:background .18s,transform .15s;
+}
+.btn-outline:hover{background:var(--card);transform:translateY(-2px)}
+.hero-proof{display:flex;gap:48px;flex-wrap:wrap}
+.proof-item{display:flex;flex-direction:column}
+.proof-num{
+  font-family:var(--font-head);font-size:38px;font-weight:700;
+  line-height:1;letter-spacing:-.01em;color:#fff;
+}
+.proof-num span{color:var(--teal);font-size:22px}
+.proof-label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:4px}
+
+/* ── APP SECTION ────────────────────────────────────── */
+#app{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:72px 48px 96px;
+}
+.app-header{text-align:center;margin-bottom:52px}
+.section-tag{
+  display:inline-block;
+  font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:12px;
+}
+h2{font-family:var(--font-head);font-size:clamp(34px,4vw,54px);font-weight:700;line-height:1;letter-spacing:-.01em;color:#fff;margin-bottom:10px}
+.app-sub{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto}
+
+/* STEPPER */
+.stepper{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;margin-bottom:40px;max-width:600px;margin-left:auto;margin-right:auto;
+}
+.stepper-step{
+  display:flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:500;color:var(--muted2);letter-spacing:.04em;
+  text-transform:uppercase;transition:color .3s;flex:1;
+}
+.stepper-step.active{color:var(--teal)}
+.stepper-step.done{color:var(--green)}
+.step-dot{
+  width:28px;height:28px;border-radius:50%;border:1.5px solid var(--muted2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+  transition:border-color .3s,background .3s,color .3s;
+}
+.stepper-step.active .step-dot{border-color:var(--teal);background:var(--teal-d);color:var(--teal)}
+.stepper-step.done .step-dot{border-color:var(--green);background:var(--green-d);color:var(--green)}
+.stepper-line{flex:1;height:1px;background:var(--border);margin:0 -8px;position:relative;top:0}
+
+/* CONTROLS TOP BAR */
+.ctrl-row{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:14px;margin-bottom:18px;
+}
+.ctrl-group{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.ctrl-label{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.toggle-set{
+  display:flex;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;padding:3px;gap:3px;
+}
+.tgl{
+  padding:7px 16px;font-family:var(--font-body);font-size:12px;font-weight:600;
+  color:var(--muted);background:none;border-radius:6px;
+  transition:background .18s,color .18s;letter-spacing:.04em;
+}
+.tgl.on{background:var(--teal);color:var(--bg)}
+.privacy-badge{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:var(--muted2);
+}
+.lock{font-size:13px}
+
+/* UPLOAD DROP ZONE */
+.drop-zone{
+  border:2px dashed var(--border2);border-radius:var(--r-xl);
+  padding:72px 40px;text-align:center;cursor:pointer;
+  background:var(--card);
+  transition:border-color .2s,background .2s;
+  position:relative;overflow:hidden;
+}
+.drop-zone:hover,.drop-zone.over{border-color:var(--teal);background:var(--teal-d)}
+.drop-zone-inner{position:relative;z-index:1}
+.dz-icon{
+  width:72px;height:72px;border-radius:18px;
+  background:var(--card2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;margin:0 auto 20px;
+}
+.dz-title{font-family:var(--font-head);font-size:22px;font-weight:600;color:#fff;margin-bottom:8px}
+.dz-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.dz-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--teal);color:var(--bg);
+  font-family:var(--font-body);font-size:13px;font-weight:700;
+  padding:11px 28px;border-radius:8px;letter-spacing:.02em;
+  margin-bottom:14px;transition:opacity .18s;
+}
+.dz-btn:hover{opacity:.85}
+.dz-hint{font-size:11px;color:var(--muted2)}
+.dz-formats{
+  display:flex;justify-content:center;gap:8px;margin-top:18px;flex-wrap:wrap;
+}
+.fmt-pill{
+  font-size:10px;font-weight:600;letter-spacing:.06em;
+  background:var(--card2);border:1px solid var(--border);
+  color:var(--muted);padding:4px 10px;border-radius:20px;
+}
+
+/* TWO-PANEL WORKSPACE */
+.workspace{
+  display:none;grid-template-columns:1fr 1fr;gap:16px;
+}
+.workspace.show{display:grid}
+.panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-xl);overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.panel-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.panel-name{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.status-pill{
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;color:var(--muted);padding:3px 10px;
+  background:var(--card2);border:1px solid var(--border);border-radius:20px;
+}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 1.8s ease infinite}
+
+/* VIDEO PLAYER */
+.vid-wrap{position:relative;background:#000d1a;flex:1;min-height:0}
+video{width:100%;display:block;max-height:360px;object-fit:contain;background:#000d1a}
+canvas{width:100%;display:block;max-height:360px;object-fit:contain;background:#000d1a}
+#off-canvas{display:none}
+.vid-controls{
+  padding:10px 14px;background:rgba(5,11,20,.95);
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+.seek-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+#seek-bar{flex:1;accent-color:var(--teal)}
+.time-txt{font-family:var(--font-head);font-size:13px;color:var(--muted);min-width:44px;letter-spacing:.03em}
+.btn-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vc-btn{
+  background:var(--card2);border:1px solid var(--border);
+  color:var(--text);font-family:var(--font-body);font-size:11px;font-weight:600;
+  padding:6px 13px;border-radius:7px;
+  transition:background .15s,border-color .15s;white-space:nowrap;
+}
+.vc-btn:hover{background:var(--border2);border-color:var(--border2)}
+.vc-btn.active{background:var(--teal-d);border-color:var(--teal-g);color:var(--teal)}
+.kbd{
+  font-size:10px;color:var(--muted2);
+  background:var(--card2);border:1px solid var(--border);
+  padding:2px 6px;border-radius:4px;font-family:monospace;margin-left:2px;
+}
+.vid-filename{
+  font-size:11px;color:var(--muted2);margin-left:auto;
+  max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* RIGHT PANEL — INSTRUCTIONS & RESULTS */
+.right-panel-inner{
+  flex:1;overflow-y:auto;padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+}
+
+/* PRE-ANALYSIS STATE */
+.pre-state{animation:fadeSlide .35s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+.pre-tip{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:14px;
+}
+.pre-tip-head{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.tip-item{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:8px 0;border-bottom:1px solid var(--border);
+}
+.tip-item:last-child{border-bottom:none}
+.tip-n{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--teal-d);border:1px solid var(--teal-g);
+  color:var(--teal);font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.tip-t{font-size:12px;font-weight:500;color:var(--text);margin-bottom:1px}
+.tip-s{font-size:11px;color:var(--muted);line-height:1.55}
+
+/* ANALYZE BUTTON */
+.analyze-wrap{display:none;padding:14px 0 4px;flex-shrink:0}
+.analyze-wrap.show{display:block}
+.analyze-btn{
+  width:100%;background:var(--teal);color:var(--bg);
+  font-family:var(--font-body);font-size:15px;font-weight:700;
+  padding:15px;border-radius:10px;letter-spacing:.03em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:opacity .18s,transform .15s;
+}
+.analyze-btn:hover:not(:disabled){opacity:.88;transform:translateY(-1px)}
+.analyze-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.demo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px}
+.demo-btn{
+  font-size:12px;color:var(--muted);background:none;border:none;
+  font-family:var(--font-body);transition:color .18s;text-decoration:underline;text-underline-offset:3px;
+}
+.demo-btn:hover{color:var(--text)}
+.analysis-hint{font-size:11px;color:var(--muted2);text-align:center;margin-top:8px;line-height:1.5}
+
+/* LOADING BAR */
+.loading-bar{
+  display:none;height:2px;background:var(--border);
+  border-radius:2px;overflow:hidden;margin:12px 0;
+}
+.loading-bar.show{display:block}
+.loading-fill{
+  height:100%;background:var(--teal);border-radius:2px;
+  animation:shimmer 1.5s ease-in-out infinite;
+  transform-origin:left;
+}
+@keyframes shimmer{0%{transform:scaleX(0) translateX(0%)}40%{transform:scaleX(.6) translateX(30%)}100%{transform:scaleX(0) translateX(200%)}transform}
+
+/* ── RESULTS ────────────────────────────────────────── */
+.results{display:none;animation:fadeSlide .4s ease}
+.results.show{display:flex;flex-direction:column;gap:14px}
+
+/* Score header */
+.score-card{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:18px;
+  display:flex;align-items:center;gap:18px;
+}
+.score-ring-wrap{position:relative;width:76px;height:76px;flex-shrink:0}
+.score-ring-svg{width:76px;height:76px;transform:rotate(-90deg)}
+.ring-track{fill:none;stroke:var(--border2);stroke-width:4}
+.ring-fill{fill:none;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .4s}
+.score-number{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.s-num{font-family:var(--font-head);font-size:22px;font-weight:700;color:#fff;line-height:1}
+.s-denom{font-size:10px;color:var(--muted);margin-top:1px}
+.score-meta .s-title{font-family:var(--font-head);font-size:18px;font-weight:600;color:#fff;margin-bottom:3px}
+.score-meta .s-desc{font-size:12px;color:var(--muted);line-height:1.5;max-width:240px}
+.score-actions{margin-left:auto;display:flex;flex-direction:column;gap:7px}
+.r-btn{
+  font-family:var(--font-body);font-size:11px;font-weight:600;
+  padding:7px 14px;border-radius:7px;white-space:nowrap;
+  transition:background .15s,transform .12s;
+}
+.r-btn:hover{transform:translateY(-1px)}
+.r-btn-dl{background:var(--teal);color:var(--bg)}
+.r-btn-dl:hover{opacity:.88}
+.r-btn-reset{background:var(--card);border:1px solid var(--border);color:var(--muted)}
+.r-btn-reset:hover{background:var(--card2);color:var(--text)}
+
+/* Measurements */
+.m-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-card{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:12px;
+}
+.m-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.m-value{font-family:var(--font-head);font-size:24px;font-weight:700;color:#fff;line-height:1;margin-bottom:4px}
+.m-status{font-size:11px;font-weight:600}
+.st-good{color:var(--green)}.st-warn{color:var(--amber)}.st-bad{color:var(--red)}
+
+/* Feedback items */
+.fb-item{
+  border-radius:var(--r-md);padding:13px 14px;
+  border:1px solid transparent;border-left-width:3px;
+  display:flex;gap:11px;align-items:flex-start;
+}
+.fb-good{background:var(--green-d);border-color:var(--green);border-left-color:var(--green)}
+.fb-warn{background:var(--amber-d);border-color:transparent;border-left-color:var(--amber)}
+.fb-bad{background:var(--red-d);border-color:transparent;border-left-color:var(--red)}
+.fb-icon{font-size:14px;margin-top:1px;flex-shrink:0;width:18px}
+.fb-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px}
+.fb-msg{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* Tips box */
+.tips-box{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:14px;
+}
+.tips-head{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.tips-list{display:flex;flex-direction:column;gap:7px}
+.tip-li{display:flex;gap:8px;align-items:flex-start}
+.tip-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:7px}
+.tip-text{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* ── HOW IT WORKS ───────────────────────────────────── */
+#how{padding:96px 48px;background:var(--bg);border-top:1px solid var(--border)}
+.how-inner{max-width:1080px;margin:0 auto}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--r-xl);overflow:hidden;margin-top:52px}
+.how-card{background:var(--bg);padding:36px 30px}
+.how-n{font-family:var(--font-head);font-size:72px;font-weight:700;line-height:1;color:var(--teal);opacity:.1;margin-bottom:14px}
+.how-icon{width:44px;height:44px;border-radius:12px;background:var(--teal-d);border:1px solid var(--teal-g);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.how-title{font-family:var(--font-head);font-size:18px;font-weight:600;color:#fff;margin-bottom:8px}
+.how-body{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── TRUST BAR ──────────────────────────────────────── */
+.trust-bar{
+  background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:28px 48px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:48px;
+}
+.trust-item{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.t-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.t-val{font-family:var(--font-head);font-size:28px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.t-val span{color:var(--teal)}
+
+/* ── FOOTER ─────────────────────────────────────────── */
+footer{
+  background:var(--bg);border-top:1px solid var(--border);
+  padding:36px 48px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;
+}
+.footer-left{display:flex;flex-direction:column;gap:4px}
+.footer-copy{font-size:11px;color:var(--muted2);line-height:1.5}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);transition:color .15s}
+.footer-links a:hover{color:var(--text)}
+
+/* ── ANIMATIONS ─────────────────────────────────────── */
+.fade-up{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.fade-up.in{opacity:1;transform:none}
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-pill,.nav-links{display:none}
+  .hero{padding:96px 20px 60px}
+  #app,#how{padding:60px 20px}
+  .how-grid{grid-template-columns:1fr}
+  .workspace{grid-template-columns:1fr}
+  .trust-bar{padding:24px 20px;gap:28px}
+  footer{flex-direction:column;padding:28px 20px;text-align:center}
+  .footer-links{justify-content:center}
+  .m-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  h1{font-size:clamp(44px,12vw,64px)}
+  .hero-proof{gap:28px}
+  .how-grid{grid-template-columns:1fr}
+  .m-grid{grid-template-columns:1fr}
+  .score-card{flex-wrap:wrap}
+  .score-actions{margin-left:0;flex-direction:row;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-mark">PI</div>
+    <div class="nav-name">Pitch<b>IQ</b></div>
+  </div>
+  <div class="nav-pill"><span class="pulse"></span> Free Forever</div>
+  <a href="#app" class="nav-cta">Start Analyzing →</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-kicker"><span class="pulse"></span> AI-Powered Cricket Analysis</div>
+    <h1>PRO COACHING.<br><span class="hl">FOR EVERY</span><br><span class="hl2">CRICKETER.</span></h1>
+    <p class="hero-sub">
+      IPL franchises have Hawk-Eye, biomechanics labs, and analytics departments.
+      <strong>Now you do too.</strong> PitchIQ uses AI to analyze your batting and bowling technique
+      — free, private, and running entirely on your device.
+    </p>
+    <div class="hero-btns">
+      <a href="#app" class="btn-main">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Analyze My Technique — Free
+      </a>
+      <a href="#how" class="btn-outline">See How It Works</a>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-item">
+        <div class="proof-num">33<span> pts</span></div>
+        <div class="proof-label">Body landmarks tracked</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">$<span>0</span></div>
+        <div class="proof-label">Cost, always</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">100<span>%</span></div>
+        <div class="proof-label">Private — on device</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">2<span>s</span></div>
+        <div class="proof-label">Per-frame analysis</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST BAR ── -->
+<div class="trust-bar">
+  <div class="trust-item"><div class="t-val">300<span>M+</span></div><div class="t-label">Cricketers globally</div></div>
+  <div class="trust-item"><div class="t-val">0<span>%</span></div><div class="t-label">Data sent to servers</div></div>
+  <div class="trust-item"><div class="t-val">6<span>+</span></div><div class="t-label">Biomechanic checks</div></div>
+  <div class="trust-item"><div class="t-val">2<span>nd</span></div><div class="t-label">Most watched sport</div></div>
+</div>
+
+<!-- ── APP ── -->
+<section id="app">
+  <div class="app-header fade-up">
+    <div class="section-tag">The Tool</div>
+    <h2>Analyze Your Technique</h2>
+    <p class="app-sub">Upload a video, scrub to the right moment, and click Analyze. Get professional coaching feedback in seconds.</p>
+  </div>
+
+  <!-- STEPPER -->
+  <div class="stepper fade-up" id="stepper">
+    <div class="stepper-step active" id="st1"><div class="step-dot" id="sd1">1</div>Upload</div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" id="st2"><div class="step-dot" id="sd2">2</div>Select Frame</div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" id="st3"><div class="step-dot" id="sd3">3</div>Analyze</div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" id="st4"><div class="step-dot" id="sd4">4</div>Results</div>
+  </div>
+
+  <!-- TOP CONTROLS -->
+  <div class="ctrl-row fade-up">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Mode</span>
+      <div class="toggle-set">
+        <button class="tgl on" id="tgl-bat" onclick="setMode('batting')">Batting</button>
+        <button class="tgl" id="tgl-bowl" onclick="setMode('bowling')">Bowling</button>
+      </div>
+      <span class="ctrl-label">Handedness</span>
+      <div class="toggle-set">
+        <button class="tgl on" id="tgl-right" onclick="setHand('right')">Right</button>
+        <button class="tgl" id="tgl-left" onclick="setHand('left')">Left</button>
+      </div>
+    </div>
+    <div class="privacy-badge"><span class="lock">🔒</span> No uploads — all AI runs locally in your browser</div>
+  </div>
+
+  <!-- UPLOAD ZONE -->
+  <div class="drop-zone fade-up" id="drop-zone"
+       onclick="document.getElementById('file-input').click()"
+       ondragover="ev=>{ev.preventDefault();this.classList.add('over')}"
+       ondragleave="this.classList.remove('over')"
+       ondrop="handleDrop(event)">
+    <div class="drop-zone-inner">
+      <div class="dz-icon">🎬</div>
+      <div class="dz-title">Drop your cricket video here</div>
+      <div class="dz-sub">Film yourself batting or bowling.<br>Side-on angle works best — ask a teammate to hold the phone.</div>
+      <div class="dz-btn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v9M3 6l4-4 4 4M1 12h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Choose Video File
+      </div>
+      <div class="dz-hint">Or drag and drop directly onto this box</div>
+      <div class="dz-formats">
+        <span class="fmt-pill">MP4</span><span class="fmt-pill">MOV</span>
+        <span class="fmt-pill">AVI</span><span class="fmt-pill">WebM</span>
+        <span class="fmt-pill">Up to 500MB</span>
+      </div>
+    </div>
+    <input type="file" id="file-input" accept="video/*" onchange="loadVideo(event.target.files[0])"/>
+  </div>
+
+  <!-- WORKSPACE (shows after upload) -->
+  <div class="workspace" id="workspace">
+    <!-- LEFT: Video player -->
+    <div class="panel">
+      <div class="panel-bar">
+        <span class="panel-name">Your Video</span>
+        <div class="status-pill"><span class="live-dot"></span><span id="vid-status-txt">Loaded</span></div>
+      </div>
+      <div class="vid-wrap">
+        <video id="main-video" playsinline style="max-height:360px"></video>
+      </div>
+      <div class="vid-controls">
+        <div class="seek-row">
+          <span class="time-txt" id="time-cur">0:00</span>
+          <input type="range" id="seek-bar" min="0" max="100" step="0.05" value="0" oninput="seekTo(this.value)"/>
+          <span class="time-txt" id="time-dur">0:00</span>
+        </div>
+        <div class="btn-row">
+          <button class="vc-btn" onclick="stepFrames(-1)" title="Back 1 frame">◀ Frame <span class="kbd">←</span></button>
+          <button class="vc-btn" id="play-btn" onclick="togglePlay()" title="Play/Pause">▶ Play <span class="kbd">Space</span></button>
+          <button class="vc-btn" onclick="stepFrames(1)" title="Forward 1 frame">Frame ▶ <span class="kbd">→</span></button>
+          <span class="vid-filename" id="fname-display" title=""></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Canvas + Results -->
+    <div class="panel">
+      <div class="panel-bar">
+        <span class="panel-name">AI Analysis</span>
+        <div class="status-pill"><span id="canvas-status-txt">Awaiting analysis</span></div>
+      </div>
+      <div class="vid-wrap" style="flex:1">
+        <canvas id="out-canvas" style="max-height:360px"></canvas>
+        <canvas id="off-canvas"></canvas>
+      </div>
+      <div style="padding:14px 14px 16px;flex-shrink:0">
+        <!-- ANALYZE BUTTON -->
+        <div class="analyze-wrap show" id="analyze-wrap">
+          <button class="analyze-btn" id="analyze-btn" onclick="runAnalysis()">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.6"/><path d="M8 5v4l2.5 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Analyze This Frame
+          </button>
+          <div class="demo-row">
+            <span style="font-size:11px;color:var(--muted2)">No video?</span>
+            <button class="demo-btn" onclick="runDemo()">Try a demo analysis instead →</button>
+          </div>
+          <div class="analysis-hint">💡 Best results: pause at bat-ball contact (batting) or front-foot landing (bowling)</div>
+        </div>
+        <!-- LOADING BAR -->
+        <div class="loading-bar" id="loading-bar"><div class="loading-fill"></div></div>
+        <!-- RIGHT PANEL CONTENT -->
+        <div class="right-panel-inner" id="right-content">
+          <div class="pre-state" id="pre-state">
+            <div class="pre-tip">
+              <div class="pre-tip-head">📋 Before You Analyze</div>
+              <div class="tip-item"><div class="tip-n">1</div><div><div class="tip-t">Pick the right moment</div><div class="tip-s">For batting: pause at bat-ball contact. For bowling: pause just as your front foot lands. These frames show the most meaningful biomechanical positions.</div></div></div>
+              <div class="tip-item"><div class="tip-n">2</div><div><div class="tip-t">Check your angle</div><div class="tip-s">Side-on camera angle gives the most accurate readings. Front-on or back-on video will still work, but side-on is ideal — same view coaches use.</div></div></div>
+              <div class="tip-item"><div class="tip-n">3</div><div><div class="tip-t">Use the frame buttons</div><div class="tip-s">Use ← → arrow keys or the Frame buttons below the video to step one frame at a time. Find the exact moment you want analyzed.</div></div></div>
+              <div class="tip-item"><div class="tip-n">4</div><div><div class="tip-t">Your privacy is protected</div><div class="tip-s">Your video never leaves your device. All AI processing happens entirely in your browser — nothing is uploaded to any server.</div></div></div>
+            </div>
+          </div>
+          <!-- Results go here -->
+          <div class="results" id="results"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how">
+  <div class="how-inner">
+    <div class="fade-up" style="text-align:center;max-width:580px;margin:0 auto 0">
+      <div class="section-tag">Under the Hood</div>
+      <h2>How PitchIQ Works</h2>
+      <p style="font-size:15px;color:var(--muted);line-height:1.7;margin-top:10px">No special equipment. No internet required after loading. Just your video, your browser, and Google's AI pose estimation running locally.</p>
+    </div>
+    <div class="how-grid fade-up">
+      <div class="how-card">
+        <div class="how-n">01</div>
+        <div class="how-icon">🎬</div>
+        <div class="how-title">Film yourself playing</div>
+        <div class="how-body">Record yourself batting or bowling on any smartphone. Ask a teammate to hold the phone at waist height, 5–10 metres away, on the off side. No tripod or special setup needed — just a steady hand and good lighting.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-n">02</div>
+        <div class="how-icon">🧠</div>
+        <div class="how-title">AI maps 33 body points</div>
+        <div class="how-body">Google MediaPipe Pose — the same technology used in professional sports analysis — runs entirely inside your browser. It detects every joint in your body and calculates precise angles at the exact frame you select. No upload. No account. Fully private.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-n">03</div>
+        <div class="how-icon">📊</div>
+        <div class="how-title">Get real coaching feedback</div>
+        <div class="how-body">PitchIQ's cricket-specific feedback engine translates raw joint angles into coaching language — the same cues a qualified Level 3 coach would use. Elbow position, stance width, shoulder alignment, release height. You get a downloadable report you can take to your next training session.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-left">
+    <div class="nav-brand">
+      <div class="nav-mark" style="width:28px;height:28px;font-size:11px">PI</div>
+      <div class="nav-name" style="font-size:16px">Pitch<b>IQ</b></div>
+    </div>
+    <div class="footer-copy" style="margin-top:8px">Powered by Google MediaPipe · Runs 100% in your browser · No data collected · Free forever</div>
+  </div>
+  <div class="footer-links">
+    <a href="#app">Analyze</a>
+    <a href="#how">How It Works</a>
+    <a href="javascript:void(0)" onclick="runDemo()">Try Demo</a>
+  </div>
+  <div class="footer-copy">© 2025 PitchIQ. Built to level the playing field.</div>
+</footer>
+
+<!-- MEDIAPIPE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1675466124/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
+
+<script>
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let appMode = 'batting', appHand = 'right';
+let poseModel = null, poseReady = false;
+let lastAnalysis = null;
+let videoLoaded = false;
+
+// ══════════════════════════════════════════════
+//  SCROLL ANIMATIONS
+// ══════════════════════════════════════════════
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// ══════════════════════════════════════════════
+//  MEDIAPIPE INIT
+// ══════════════════════════════════════════════
+(function initMediaPipe() {
+  if (typeof Pose === 'undefined') {
+    console.warn('PitchIQ: MediaPipe not available — demo mode will be used');
+    return;
+  }
+  poseModel = new Pose({
+    locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}`
+  });
+  poseModel.setOptions({
+    modelComplexity: 1,
+    smoothLandmarks: false,
+    enableSegmentation: false,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+  });
+  poseModel.onResults(onPoseResults);
+  poseModel.initialize()
+    .then(() => { poseReady = true; console.log('PitchIQ: AI model ready'); })
+    .catch(e => console.warn('PitchIQ: MediaPipe init failed —', e));
+})();
+
+// ══════════════════════════════════════════════
+//  TOGGLES
+// ══════════════════════════════════════════════
+function setMode(m) {
+  appMode = m;
+  document.getElementById('tgl-bat').classList.toggle('on', m === 'batting');
+  document.getElementById('tgl-bowl').classList.toggle('on', m === 'bowling');
+  clearResults();
+}
+function setHand(h) {
+  appHand = h;
+  document.getElementById('tgl-right').classList.toggle('on', h === 'right');
+  document.getElementById('tgl-left').classList.toggle('on', h === 'left');
+  clearResults();
+}
+
+// ══════════════════════════════════════════════
+//  VIDEO LOADING
+// ══════════════════════════════════════════════
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('video/')) loadVideo(f);
+}
+
+function loadVideo(file) {
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const vid = document.getElementById('main-video');
+  vid.src = url;
+  vid.onloadedmetadata = () => {
+    videoLoaded = true;
+    syncCanvasDimensions();
+    document.getElementById('drop-zone').style.display = 'none';
+    document.getElementById('workspace').classList.add('show');
+    const name = file.name;
+    const el = document.getElementById('fname-display');
+    el.textContent = name;
+    el.title = name;
+    document.getElementById('time-dur').textContent = fmtTime(vid.duration);
+    drawPlaceholderCanvas();
+    setStep(2);
+  };
+  vid.ontimeupdate = () => {
+    const d = vid.duration || 1;
+    document.getElementById('time-cur').textContent = fmtTime(vid.currentTime);
+    document.getElementById('seek-bar').value = (vid.currentTime / d * 100).toFixed(2);
+  };
+  vid.onplay = () => {
+    document.getElementById('play-btn').textContent = '⏸ Pause';
+    document.getElementById('vid-status-txt').textContent = 'Playing';
+  };
+  vid.onpause = () => {
+    document.getElementById('play-btn').textContent = '▶ Play';
+    document.getElementById('vid-status-txt').textContent = 'Paused — ready to analyze';
+    setStep(2);
+  };
+}
+
+function syncCanvasDimensions() {
+  const vid = document.getElementById('main-video');
+  const oc = document.getElementById('out-canvas');
+  const fc = document.getElementById('off-canvas');
+  oc.width = fc.width = vid.videoWidth || 640;
+  oc.height = fc.height = vid.videoHeight || 480;
+}
+
+function togglePlay() {
+  const vid = document.getElementById('main-video');
+  vid.paused ? vid.play() : vid.pause();
+}
+
+function seekTo(pct) {
+  const vid = document.getElementById('main-video');
+  if (vid.duration) {
+    vid.currentTime = vid.duration * (pct / 100);
+    vid.pause();
+  }
+}
+
+function stepFrames(dir) {
+  const vid = document.getElementById('main-video');
+  vid.pause();
+  vid.currentTime = Math.max(0, Math.min(vid.duration || 0, vid.currentTime + dir / 30));
+}
+
+function fmtTime(t) {
+  if (!t || isNaN(t)) return '0:00';
+  const m = Math.floor(t / 60), s = Math.floor(t % 60);
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (!videoLoaded) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'ArrowLeft') { e.preventDefault(); stepFrames(-1); }
+  if (e.code === 'ArrowRight') { e.preventDefault(); stepFrames(1); }
+});
+
+function drawPlaceholderCanvas() {
+  const oc = document.getElementById('out-canvas');
+  if (!oc.width) return;
+  const ctx = oc.getContext('2d');
+  ctx.fillStyle = '#000d1a';
+  ctx.fillRect(0, 0, oc.width, oc.height);
+  ctx.fillStyle = 'rgba(90,122,154,0.35)';
+  ctx.font = '14px "Plus Jakarta Sans", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Seek to the key moment, then click Analyze', oc.width / 2, oc.height / 2 - 8);
+  ctx.fillStyle = 'rgba(90,122,154,0.2)';
+  ctx.font = '12px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('Tip: use ← → arrow keys to step one frame at a time', oc.width / 2, oc.height / 2 + 16);
+  ctx.textAlign = 'start';
+}
+
+// ══════════════════════════════════════════════
+//  STEPPER
+// ══════════════════════════════════════════════
+function setStep(n) {
+  for (let i = 1; i <= 4; i++) {
+    const s = document.getElementById(`st${i}`);
+    const d = document.getElementById(`sd${i}`);
+    s.classList.remove('active', 'done');
+    if (i < n) { s.classList.add('done'); d.textContent = '✓'; }
+    else if (i === n) { s.classList.add('active'); d.textContent = i; }
+    else { d.textContent = i; }
+  }
+}
+
+// ══════════════════════════════════════════════
+//  ANALYSIS
+// ══════════════════════════════════════════════
+async function runAnalysis() {
+  const vid = document.getElementById('main-video');
+  if (!vid.src) { alert('Please upload a video first.'); return; }
+  vid.pause();
+  setAnalysisState(true);
+  clearResults();
+  setStep(3);
+  syncCanvasDimensions();
+
+  const fc = document.getElementById('off-canvas');
+  const oc = document.getElementById('out-canvas');
+  const fctx = fc.getContext('2d');
+
+  // Draw current frame onto off-screen canvas
+  fctx.drawImage(vid, 0, 0, fc.width, fc.height);
+
+  // Mirror it to output canvas immediately (user sees it right away)
+  const octx = oc.getContext('2d');
+  octx.drawImage(vid, 0, 0, oc.width, oc.height);
+
+  if (poseReady && poseModel) {
+    try {
+      await poseModel.send({ image: fc });
+    } catch (err) {
+      console.error('PitchIQ pose error:', err);
+      setAnalysisState(false);
+      showNoDetection(oc);
+    }
+  } else {
+    // Fallback: demo results after short delay
+    setTimeout(runDemo, 1000);
+  }
+}
+
+// Called by MediaPipe when pose results are ready
+function onPoseResults(results) {
+  const oc = document.getElementById('out-canvas');
+  const ctx = oc.getContext('2d');
+
+  ctx.clearRect(0, 0, oc.width, oc.height);
+  ctx.drawImage(results.image, 0, 0, oc.width, oc.height);
+
+  if (results.poseLandmarks && results.poseLandmarks.length > 0) {
+    // Draw skeleton
+    if (typeof drawConnectors !== 'undefined' && typeof POSE_CONNECTIONS !== 'undefined') {
+      drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, {
+        color: 'rgba(0,212,170,0.6)', lineWidth: 2
+      });
+      drawLandmarks(ctx, results.poseLandmarks, {
+        color: '#ffffff', fillColor: 'rgba(0,212,170,0.9)',
+        lineWidth: 1, radius: 3.5
+      });
+    } else {
+      drawSkeletonFallback(ctx, results.poseLandmarks, oc.width, oc.height);
+    }
+
+    // Angle annotations
+    drawAngleAnnotations(ctx, results.poseLandmarks, oc.width, oc.height);
+
+    // Build feedback
+    const analysis = buildCricketFeedback(results.poseLandmarks, appMode, appHand);
+    lastAnalysis = { ...analysis, mode: appMode, hand: appHand };
+    renderResults(analysis);
+    document.getElementById('canvas-status-txt').textContent = '✓ Pose detected';
+    document.getElementById('canvas-status-txt').style.color = 'var(--green)';
+    setStep(4);
+  } else {
+    showNoDetection(oc);
+  }
+
+  setAnalysisState(false);
+}
+
+function showNoDetection(oc) {
+  const ctx = oc.getContext('2d');
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.fillRect(0, 0, oc.width, oc.height);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 16px "Plus Jakarta Sans",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('No person detected in this frame', oc.width / 2, oc.height / 2 - 14);
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = '13px "Plus Jakarta Sans",sans-serif';
+  ctx.fillText('Try a different frame, or click "Try a demo" below', oc.width / 2, oc.height / 2 + 14);
+  ctx.textAlign = 'start';
+  document.getElementById('canvas-status-txt').textContent = 'No pose found — try another frame';
+  document.getElementById('canvas-status-txt').style.color = 'var(--amber)';
+}
+
+function setAnalysisState(loading) {
+  const btn = document.getElementById('analyze-btn');
+  const bar = document.getElementById('loading-bar');
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" stroke-dasharray="20" stroke-dashoffset="0" style="animation:spin 1s linear infinite"><animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="0.8s" repeatCount="indefinite"/></circle></svg> Analyzing...'
+    : '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.6"/><path d="M8 5v4l2.5 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Analyze This Frame';
+  bar.classList.toggle('show', loading);
+}
+
+// ══════════════════════════════════════════════
+//  SKELETON FALLBACK
+// ══════════════════════════════════════════════
+function drawSkeletonFallback(ctx, lm, w, h) {
+  const pairs = [[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28]];
+  ctx.strokeStyle = 'rgba(0,212,170,0.7)';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  pairs.forEach(([a, b]) => {
+    if (lm[a] && lm[b] && lm[a].visibility > 0.2 && lm[b].visibility > 0.2) {
+      ctx.beginPath();
+      ctx.moveTo(lm[a].x * w, lm[a].y * h);
+      ctx.lineTo(lm[b].x * w, lm[b].y * h);
+      ctx.stroke();
+    }
+  });
+  ctx.fillStyle = 'rgba(0,212,170,0.95)';
+  [11,12,13,14,15,16,23,24,25,26,27,28].forEach(i => {
+    if (lm[i] && lm[i].visibility > 0.2) {
+      ctx.beginPath();
+      ctx.arc(lm[i].x * w, lm[i].y * h, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+}
+
+// ══════════════════════════════════════════════
+//  ANGLE ANNOTATIONS ON CANVAS
+// ══════════════════════════════════════════════
+function drawAngleAnnotations(ctx, lm, w, h) {
+  const R = appHand === 'right';
+  const pts = (i) => lm[i] ? { x: lm[i].x * w, y: lm[i].y * h, v: lm[i].visibility } : null;
+
+  // Key joints to annotate
+  const joints = appMode === 'batting'
+    ? [
+        { center: R ? 13 : 14, a: R ? 11 : 12, b: R ? 15 : 16, label: 'Elbow' },
+        { center: R ? 11 : 12, a: R ? 13 : 14, b: R ? 23 : 24, label: 'Shoulder' }
+      ]
+    : [
+        { center: R ? 14 : 13, a: R ? 12 : 11, b: R ? 16 : 15, label: 'Bowl Arm' },
+        { center: R ? 12 : 11, a: R ? 14 : 13, b: R ? 24 : 23, label: 'Shoulder' }
+      ];
+
+  joints.forEach(({ center, a, b, label }) => {
+    const cp = pts(center), ap = pts(a), bp = pts(b);
+    if (!cp || !ap || !bp || cp.v < 0.3 || ap.v < 0.3 || bp.v < 0.3) return;
+
+    const ang = calcAngle(ap, cp, bp);
+    const color = ang >= 80 && ang <= 150 ? '#00d4aa' : ang < 65 ? '#ef4444' : '#f59e0b';
+
+    // Draw arc
+    const r = 22;
+    const a1 = Math.atan2(ap.y - cp.y, ap.x - cp.x);
+    const a2 = Math.atan2(bp.y - cp.y, bp.x - cp.x);
+    ctx.beginPath();
+    ctx.arc(cp.x, cp.y, r, Math.min(a1, a2), Math.max(a1, a2));
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw label background + text
+    const mid = (Math.min(a1, a2) + Math.max(a1, a2)) / 2;
+    const lx = cp.x + Math.cos(mid) * (r + 22);
+    const ly = cp.y + Math.sin(mid) * (r + 22);
+    const txt = `${Math.round(ang)}°`;
+
+    ctx.font = 'bold 12px "Plus Jakarta Sans",sans-serif';
+    const tw = ctx.measureText(txt).width;
+    ctx.fillStyle = 'rgba(5,11,20,0.75)';
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(lx - tw / 2 - 5, ly - 9, tw + 10, 18, 4) : (() => { ctx.rect(lx - tw / 2 - 5, ly - 9, tw + 10, 18); })();
+    ctx.fill();
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.fillText(txt, lx, ly + 3);
+    ctx.textAlign = 'start';
+  });
+}
+
+// ══════════════════════════════════════════════
+//  GEOMETRY
+// ══════════════════════════════════════════════
+function calcAngle(A, B, C) {
+  const r = Math.atan2(C.y - B.y, C.x - B.x) - Math.atan2(A.y - B.y, A.x - B.x);
+  let deg = Math.abs(r * 180 / Math.PI);
+  return deg > 180 ? 360 - deg : deg;
+}
+function ptDist(a, b) {
+  return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+}
+
+// ══════════════════════════════════════════════
+//  CRICKET FEEDBACK ENGINE
+// ══════════════════════════════════════════════
+function buildCricketFeedback(lm, mode, hand) {
+  const R = hand === 'right';
+  const L  = (i) => lm[i];
+
+  // Landmark shortcuts
+  const LS=L(11),RS=L(12),LE=L(13),RE=L(14),LW=L(15),RW=L(16);
+  const LH=L(23),RH=L(24),LK=L(25),RK=L(26),LA=L(27),RA=L(28);
+  const NOSE=L(0);
+
+  let score = 0;
+  const feedback = [];
+  const measures = {};
+  let tips = [];
+
+  if (mode === 'batting') {
+    const fSh = R ? LS : RS;
+    const fEl = R ? LE : RE;
+    const fWr = R ? LW : RW;
+    const bSh = R ? RS : LS;
+    const fAn = R ? LA : RA;
+    const bAn = R ? RA : LA;
+
+    // 1. Front elbow angle (target: 90–140°)
+    const ea = calcAngle(fSh, fEl, fWr), er = Math.round(ea);
+    const eGood = ea >= 90 && ea <= 140, eBad = ea < 75;
+    measures['Front Elbow'] = { v: `${er}°`, s: eGood ? 'good' : eBad ? 'bad' : 'warn' };
+    if (eGood) {
+      score += 28;
+      feedback.push({ s: 'good', t: 'Front elbow — excellent', m: `${er}° is textbook. Your front elbow is bent and driving through the line, generating maximum bat speed. This is what coaches drill for years — you have it naturally.` });
+    } else if (eBad) {
+      score += 5;
+      feedback.push({ s: 'bad', t: 'Front elbow collapsing (${er}°)', m: `${er}° is too acute — the elbow is folding inward and locking your swing. Shadow-bat in a mirror, consciously pointing the elbow out and up through contact. This one change can add serious power.` });
+    } else {
+      score += 14;
+      feedback.push({ s: 'warn', t: `Front elbow slightly extended (${er}°)`, m: `${er}° — marginally too straight. A little more flex (aim for around 110°) will improve timing consistency, especially against short-pitched bowling. It's a small adjustment with a big impact.` });
+    }
+
+    // 2. Stance width
+    const stW = ptDist(LA, RA), shW = ptDist(LS, RS);
+    const ratio = shW > 0 ? stW / shW : 1;
+    const wGood = ratio >= 0.85 && ratio <= 1.5, wBad = ratio > 1.7;
+    const wLabel = ratio > 1.5 ? 'Wide' : ratio < 0.8 ? 'Narrow' : 'Good';
+    measures['Stance Width'] = { v: wLabel, s: wGood ? 'good' : wBad ? 'bad' : 'warn' };
+    if (wGood) {
+      score += 22;
+      feedback.push({ s: 'good', t: 'Stance width — solid base', m: `Your base is roughly shoulder-width — the sweet spot. You have stability for power drives without sacrificing the footwork mobility needed against spin and late movement.` });
+    } else if (wBad) {
+      score += 6;
+      feedback.push({ s: 'bad', t: 'Stance too wide', m: `Your base is ${Math.round(ratio * 100)}% of shoulder width. An extremely wide stance restricts weight transfer and shuts down footwork — you can't get to the pitch of the ball efficiently. Bring your feet to shoulder width.` });
+    } else {
+      score += 13;
+      feedback.push({ s: 'warn', t: `Stance ${wLabel.toLowerCase()} — adjust slightly`, m: `Your base is slightly ${wLabel.toLowerCase()} of ideal. Minor adjustment toward shoulder width will improve your balance through the shot and give you better options against both pace and spin.` });
+    }
+
+    // 3. Shoulder alignment (side-on check)
+    const tilt = Math.abs(fSh.y - bSh.y);
+    const tiltGood = tilt > 0.055;
+    measures['Shoulder Alignment'] = { v: tiltGood ? 'Side-on' : 'Opening', s: tiltGood ? 'good' : 'warn' };
+    if (tiltGood) {
+      score += 24;
+      feedback.push({ s: 'good', t: 'Shoulder alignment — side-on', m: `Good side-on position. Front shoulder is lower and pointing toward the bowler, keeping you in line and reducing edge risk on the off side. Classic technique.` });
+    } else {
+      score += 10;
+      feedback.push({ s: 'warn', t: 'Opening shoulders early', m: `Shoulders are opening up before or at contact. This exposes your full bat face and dramatically increases edge risk. Try to keep your front shoulder pointing at the bowler a fraction longer — it's one of the hardest habits to fix, but the most rewarding.` });
+    }
+
+    // 4. Head position
+    const headOff = NOSE ? Math.abs(NOSE.x - fAn.x) : 0.2;
+    const headGood = headOff < 0.18;
+    measures['Head Position'] = { v: headGood ? 'Over ball' : 'Drifting', s: headGood ? 'good' : 'bad' };
+    if (headGood) {
+      score += 26;
+      feedback.push({ s: 'good', t: 'Head position — eyes on the ball', m: `Head is over the ball at contact. Your eyes are in the right position to judge length and line. This is the most fundamental thing a batsman can do — and you're doing it.` });
+    } else {
+      score += 5;
+      feedback.push({ s: 'bad', t: 'Head drifting off line', m: `Your head is moving away from the line of the ball at contact. Every missed ball in cricket history starts here. Focus: "nose over front foot" as a mantra through the shot. This one fix will immediately improve your timing.` });
+    }
+
+    tips = [
+      'Film from directly side-on, at waist height, 5–10m away for the most accurate elbow readings.',
+      'Pause precisely at bat-ball contact — the frame just before or after changes your elbow reading significantly.',
+      'Bright, even lighting dramatically improves AI detection. Outdoors on an overcast day is ideal.',
+      'Wear fitted clothing that contrasts with the background — loose whites against a white sightscreen makes detection harder.',
+      'Run separate analyses for your cover drive, pull shot, and defensive push — each reveals different technique patterns.',
+      'Save your report after every net session and compare week-over-week to track genuine technical progress.'
+    ];
+
+  } else {
+    // BOWLING
+    const bSh = R ? RS : LS;
+    const bEl = R ? RE : LE;
+    const bWr = R ? RW : LW;
+    const fSh = R ? LS : RS;
+    const fEl = R ? LE : RE;
+
+    // 1. Bowling arm angle (ICC legality: < 15° of straightening)
+    const ba = calcAngle(bSh, bEl, bWr), br = Math.round(ba);
+    const bLegal = ba < 150, bBorderline = ba >= 150 && ba < 165, bIllegal = ba >= 165;
+    measures['Arm Angle'] = { v: `${br}°`, s: bLegal ? 'good' : bBorderline ? 'warn' : 'bad' };
+    if (bLegal) {
+      score += 30;
+      feedback.push({ s: 'good', t: 'Arm action — ICC legal', m: `${br}° — well within the 15° straightening limit. Your action is biomechanically clean. Bowl with confidence — no throwing concerns here.` });
+    } else if (bBorderline) {
+      score += 15;
+      feedback.push({ s: 'warn', t: `Borderline arm angle (${br}°)`, m: `${br}° is within the ICC legal range but close to the limit. Get a Level 2+ coach to review your full action on video from multiple angles. Small flaws in this range can become reportable under match conditions.` });
+    } else {
+      score += 0;
+      feedback.push({ s: 'bad', t: `Potential illegal action (${br}°)`, m: `${br}° is above the ICC 15° limit. This may constitute an illegal bowling action. Stop bowling at this intensity and consult a qualified coach immediately to restructure your release mechanics before you develop ingrained habits.` });
+    }
+
+    // 2. Front arm height (higher = more shoulder rotation = more pace)
+    const far = fSh.y - fEl.y;
+    const faGood = far > 0.08, faBad = far < -0.04;
+    const faLabel = far > 0.08 ? 'High' : far > -0.02 ? 'Shoulder' : 'Low';
+    measures['Front Arm'] = { v: faLabel, s: faGood ? 'good' : faBad ? 'bad' : 'warn' };
+    if (faGood) {
+      score += 26;
+      feedback.push({ s: 'good', t: 'Front arm — fully loaded', m: `Front arm is high and driving up before delivery — excellent. This counter-rotation is where free pace comes from. You're generating shoulder rotation efficiently without burning muscular energy.` });
+    } else if (faBad) {
+      score += 5;
+      feedback.push({ s: 'bad', t: 'Front arm too low', m: `Your front arm is well below shoulder height. This collapses shoulder rotation and can cost you 3–6 km/h of pace. Daily drill: "front arm to the sky" before each delivery in your run-up — feel the difference it makes immediately.` });
+    } else {
+      score += 13;
+      feedback.push({ s: 'warn', t: 'Front arm at shoulder height', m: `Your front arm reaches shoulder height but isn't fully extended skyward. Getting that extra 30–40° of lift creates significantly more shoulder rotation through the crease — it's one of the highest-return technical fixes for any pace bowler.` });
+    }
+
+    // 3. Body lean
+    const smx = (LS.x + RS.x) / 2, hmx = (LH.x + RH.x) / 2;
+    const lean = Math.abs(smx - hmx);
+    const leanGood = lean > 0.04;
+    measures['Body Lean'] = { v: leanGood ? 'Forward ✓' : 'Upright', s: leanGood ? 'good' : 'warn' };
+    if (leanGood) {
+      score += 22;
+      feedback.push({ s: 'good', t: 'Body lean — good forward momentum', m: `Shoulders are leaning into the crease at delivery. You're converting run-up momentum into ball speed efficiently. This is where free pace lives — and you're tapping into it.` });
+    } else {
+      score += 10;
+      feedback.push({ s: 'warn', t: 'Body too upright at delivery', m: `Standing upright at delivery loses the momentum built up in your run-up. Lean your shoulders forward over the crease — imagine trying to release the ball as far down the pitch as possible. It should feel like you're almost falling forward.` });
+    }
+
+    // 4. Release height
+    const rh = bSh.y - bEl.y;
+    const rhGood = rh > 0.05;
+    measures['Release Height'] = { v: rhGood ? 'High ✓' : 'Shoulder level', s: rhGood ? 'good' : 'warn' };
+    if (rhGood) {
+      score += 22;
+      feedback.push({ s: 'good', t: 'Release height — over the top', m: `High arm at release — your action generates natural carry and bounce. Batsmen can't get under the ball as easily, and it creates a favorable geometry for LBW decisions. A genuine asset.` });
+    } else {
+      score += 10;
+      feedback.push({ s: 'warn', t: 'Release point at shoulder level', m: `Your release point is at shoulder height rather than above it. A higher arm action generates more natural bounce and changes the geometry for the batsman. Check whether fatigue, run-up angle, or front knee bend is pulling your arm down.` });
+    }
+
+    tips = [
+      'Film from the bowling crease side-on, at hip height — not from behind the umpire.',
+      'Best analysis frame: just as your front foot is landing in the delivery stride, before the arm reaches the release point.',
+      'For spinners: also film a close-up of your wrist and grip to analyze finger pressure and wrist position separately.',
+      'Compare multiple deliveries — technical consistency matters as much as having good angles in isolation.',
+      'If your arm angle reading seems unexpectedly high, your camera angle may be slightly front-on — re-film from true side-on.',
+      'Share your PitchIQ report with your club coach for a combined human + AI analysis conversation.'
+    ];
+  }
+
+  score = Math.min(100, Math.max(0, score));
+  return { score, feedback, measures, tips };
+}
+
+// ══════════════════════════════════════════════
+//  RENDER RESULTS
+// ══════════════════════════════════════════════
+function renderResults({ score, feedback, measures, tips }) {
+  const res = document.getElementById('results');
+  const pre = document.getElementById('pre-state');
+  pre.style.display = 'none';
+
+  const sColor = score >= 75 ? 'var(--green)' : score >= 50 ? 'var(--amber)' : 'var(--red)';
+  const sTitle = score >= 75 ? 'Strong Technique' : score >= 50 ? 'Developing Technique' : 'Needs Attention';
+  const sDesc = score >= 75
+    ? 'Minor refinements available — you have a solid base to build on.'
+    : score >= 50
+    ? 'Clear areas to work on — focused practice will fast-track improvement.'
+    : 'Fundamental adjustments recommended — read the feedback carefully and work with a coach.';
+
+  const circ = 2 * Math.PI * 30;
+  const dash = circ - (score / 100) * circ;
+
+  // Build measures HTML
+  const measHTML = Object.entries(measures).map(([k, {v, s}]) => {
+    const stLabel = s === 'good' ? '✓ Good' : s === 'warn' ? '⚠ Adjust' : '✗ Focus here';
+    return `<div class="m-card">
+      <div class="m-label">${k}</div>
+      <div class="m-value">${v.replace(' ✓','')}</div>
+      <div class="m-status st-${s}">${stLabel}</div>
+    </div>`;
+  }).join('');
+
+  // Build feedback HTML
+  const fbHTML = feedback.map(f => {
+    const icon = f.s === 'good' ? '✓' : f.s === 'warn' ? '⚠' : '✕';
+    return `<div class="fb-item fb-${f.s}">
+      <div class="fb-icon">${icon}</div>
+      <div><div class="fb-title">${f.t}</div><div class="fb-msg">${f.m}</div></div>
+    </div>`;
+  }).join('');
+
+  // Build tips HTML
+  const tipsHTML = tips.map(t => `<div class="tip-li"><div class="tip-dot"></div><div class="tip-text">${t}</div></div>`).join('');
+
+  res.innerHTML = `
+    <div class="score-card">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" viewBox="0 0 76 76">
+          <circle class="ring-track" cx="38" cy="38" r="30"/>
+          <circle class="ring-fill" cx="38" cy="38" r="30"
+            stroke="${sColor}"
+            stroke-dasharray="${circ.toFixed(1)}"
+            stroke-dashoffset="${circ.toFixed(1)}"
+            id="ring-fill-anim"/>
+        </svg>
+        <div class="score-number">
+          <div class="s-num" id="score-counter">0</div>
+          <div class="s-denom">/100</div>
+        </div>
+      </div>
+      <div class="score-meta">
+        <div class="s-title">${sTitle}</div>
+        <div class="s-desc">${sDesc}</div>
+      </div>
+      <div class="score-actions">
+        <button class="r-btn r-btn-dl" onclick="downloadReport()">⬇ Report</button>
+        <button class="r-btn r-btn-reset" onclick="clearResults()">↩ Reset</button>
+      </div>
+    </div>
+    <div class="m-grid">${measHTML}</div>
+    ${fbHTML}
+    <div class="tips-box">
+      <div class="tips-head">💡 Tips for More Accurate Analysis</div>
+      <div class="tips-list">${tipsHTML}</div>
+    </div>
+  `;
+
+  res.classList.add('show');
+
+  // Animate score ring
+  requestAnimationFrame(() => {
+    const ring = document.getElementById('ring-fill-anim');
+    if (ring) ring.style.strokeDashoffset = dash.toFixed(1);
+  });
+
+  // Animate score counter
+  let start = null, from = 0, to = score;
+  function countUp(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / 1200, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const el = document.getElementById('score-counter');
+    if (el) el.textContent = Math.round(from + (to - from) * ease);
+    if (p < 1) requestAnimationFrame(countUp);
+  }
+  requestAnimationFrame(countUp);
+
+  // Scroll into view
+  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function clearResults() {
+  const res = document.getElementById('results');
+  const pre = document.getElementById('pre-state');
+  res.classList.remove('show');
+  res.innerHTML = '';
+  pre.style.display = '';
+  document.getElementById('canvas-status-txt').textContent = 'Awaiting analysis';
+  document.getElementById('canvas-status-txt').style.color = '';
+  if (videoLoaded) setStep(2);
+}
+
+// ══════════════════════════════════════════════
+//  DEMO MODE
+// ══════════════════════════════════════════════
+function runDemo() {
+  // Show workspace if hidden
+  const ws = document.getElementById('workspace');
+  if (!ws.classList.contains('show')) {
+    document.getElementById('drop-zone').style.display = 'none';
+    ws.classList.add('show');
+    document.getElementById('analyze-wrap').classList.add('show');
+  }
+
+  setAnalysisState(true);
+  setStep(3);
+
+  // Draw demo figure
+  const oc = document.getElementById('out-canvas');
+  if (!oc.width) { oc.width = 640; oc.height = 480; }
+  const ctx = oc.getContext('2d');
+
+  // Cricket ground background
+  ctx.fillStyle = '#0d2218'; ctx.fillRect(0, 0, oc.width, oc.height);
+  ctx.fillStyle = '#102b1e'; ctx.fillRect(120, 0, oc.width - 200, oc.height);
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1.5;
+  ctx.setLineDash([10, 10]);
+  ctx.beginPath(); ctx.moveTo(oc.width / 2, 0); ctx.lineTo(oc.width / 2, oc.height); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const cx = oc.width / 2 - 15, cy = oc.height / 2 + 10;
+  const D = appMode === 'batting';
+
+  // Body points for batting/bowling demo poses
+  const pts = D ? {
+    head:[cx,cy-100],
+    lSh:[cx-30,cy-62],rSh:[cx+32,cy-64],
+    lEl:[cx-62,cy-30],rEl:[cx+30,cy-20],
+    lWr:[cx-78,cy],rWr:[cx+20,cy+12],
+    lHi:[cx-8,cy+2],rHi:[cx+14,cy],
+    lKn:[cx-14,cy+62],rKn:[cx+20,cy+66],
+    lAn:[cx-20,cy+124],rAn:[cx+26,cy+124]
+  } : {
+    head:[cx+6,cy-108],
+    lSh:[cx-24,cy-66],rSh:[cx+28,cy-62],
+    lEl:[cx-48,cy-96],rEl:[cx+38,cy-22],
+    lWr:[cx-36,cy-128],rWr:[cx+44,cy+2],
+    lHi:[cx-2,cy+2],rHi:[cx+18,cy],
+    lKn:[cx-10,cy+58],rKn:[cx+22,cy+68],
+    lAn:[cx-14,cy+120],rAn:[cx+28,cy+120]
+  };
+
+  const conns=[['head','lSh'],['head','rSh'],['lSh','rSh'],['lSh','lEl'],['lEl','lWr'],['rSh','rEl'],['rEl','rWr'],['lSh','lHi'],['rSh','rHi'],['lHi','rHi'],['lHi','lKn'],['lKn','lAn'],['rHi','rKn'],['rKn','rAn']];
+
+  ctx.strokeStyle = 'rgba(0,212,170,0.7)'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+  conns.forEach(([a,b]) => {
+    ctx.beginPath(); ctx.moveTo(...pts[a]); ctx.lineTo(...pts[b]); ctx.stroke();
+  });
+  ctx.fillStyle = 'rgba(0,212,170,0.95)';
+  Object.values(pts).forEach(([x,y]) => {
+    ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI*2); ctx.fill();
+  });
+
+  // Angle annotation on elbow
+  const keyElbow = D ? pts.lEl : pts.rEl;
+  const keyA = D ? pts.lSh : pts.rSh;
+  const keyB = D ? pts.lWr : pts.rWr;
+  const demoAngle = D ? 112 : 131;
+  const c = 'var(--teal,#00d4aa)';
+
+  ctx.strokeStyle = '#00d4aa'; ctx.lineWidth = 2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.arc(keyElbow[0], keyElbow[1], 22, -Math.PI*.3, -Math.PI*.8, true); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(5,11,20,0.8)'; ctx.beginPath();
+  if(ctx.roundRect){ctx.roundRect(keyElbow[0]-28,keyElbow[1]-26,52,18,4);}else{ctx.rect(keyElbow[0]-28,keyElbow[1]-26,52,18);}
+  ctx.fill();
+  ctx.fillStyle = '#00d4aa'; ctx.font = 'bold 12px "Plus Jakarta Sans",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(`${demoAngle}°`, keyElbow[0], keyElbow[1]-12); ctx.textAlign = 'start';
+
+  // Demo label
+  ctx.fillStyle = 'rgba(90,122,154,0.7)'; ctx.font = '300 11px "Plus Jakarta Sans",sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('DEMO MODE · Upload your own video for a personalized analysis', oc.width/2, oc.height-16); ctx.textAlign = 'start';
+
+  document.getElementById('canvas-status-txt').textContent = 'Demo mode';
+  document.getElementById('canvas-status-txt').style.color = 'var(--amber)';
+
+  const demoData = D ? {
+    score: 67,
+    measures: { 'Front Elbow':{v:'112°',s:'good'}, 'Stance Width':{v:'Good',s:'good'}, 'Shoulder Alignment':{v:'Opening',s:'warn'}, 'Head Position':{v:'Drifting',s:'bad'} },
+    feedback: [
+      { s:'good', t:'Front elbow — excellent (112°)', m:'112° is ideal range. Your front elbow is driving through the line and generating real bat speed. This is what hours of drilling looks like — you have it.' },
+      { s:'good', t:'Stance width — solid base', m:'Shoulder-width base provides the balance between stability and mobility. You can weight-transfer into drives while staying nimble for footwork adjustments.' },
+      { s:'warn', t:'Opening shoulders early', m:'Shoulders appear to be opening before contact. Keep the front shoulder pointing at the bowler a fraction longer — this one adjustment is the difference between edging to slip and playing through the covers.' },
+      { s:'bad', t:'Head drifting off line', m:'Head is moving away from the line of the ball. "Nose over front foot" is the oldest coaching cue in cricket for a reason. Fix this and your timing will noticeably improve.' }
+    ],
+    tips: ['DEMO: Upload your own video for real personal analysis.','Film side-on at waist height for clearest results.','Pause precisely at bat-ball contact before analyzing.','Bright lighting improves AI detection accuracy significantly.','Contrast your clothing against the background.','Re-analyze weekly to track genuine progress.']
+  } : {
+    score: 75,
+    measures: { 'Arm Angle':{v:'131°',s:'good'}, 'Front Arm':{v:'Shoulder',s:'warn'}, 'Body Lean':{v:'Forward ✓',s:'good'}, 'Release Height':{v:'High ✓',s:'good'} },
+    feedback: [
+      { s:'good', t:'Arm action — ICC legal (131°)', m:'131° — comfortably within the 15° limit. Your action is structurally clean. Bowl with full confidence at any level.' },
+      { s:'warn', t:'Front arm at shoulder height', m:'Your front arm reaches shoulder height but isn\'t fully skyward. That extra 30° of lift creates significantly more shoulder rotation through the crease — it\'s the highest-return technical fix for any pace bowler.' },
+      { s:'good', t:'Body lean — good forward momentum', m:'You\'re converting run-up pace into ball speed efficiently. This is where free pace lives — and you\'re tapping into it.' },
+      { s:'good', t:'Release height — over the top', m:'High arm at release creates natural carry and bounce. Batsmen can\'t get under the ball as easily. A real asset to your game.' }
+    ],
+    tips: ['DEMO: Upload your own bowling video for real analysis.','Film from directly side-on at crease height.','Best frame: just as your front foot lands in the delivery stride.','For spinners, separately film a close-up of wrist and grip.','Compare multiple deliveries — consistency matters.','Share your report with your coach for combined analysis.']
+  };
+
+  lastAnalysis = { ...demoData, mode: appMode, hand: appHand };
+  setTimeout(() => { setAnalysisState(false); renderResults(demoData); setStep(4); }, 600);
+}
+
+// ══════════════════════════════════════════════
+//  DOWNLOAD REPORT
+// ══════════════════════════════════════════════
+function downloadReport() {
+  if (!lastAnalysis) return;
+  const { score, measures, feedback, tips, mode: m, hand: h } = lastAnalysis;
+  const date = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const sTitle = score >= 75 ? 'Strong Technique' : score >= 50 ? 'Developing Technique' : 'Needs Attention';
+  const sColor = score >= 75 ? '#22c55e' : score >= 50 ? '#f59e0b' : '#ef4444';
+  const circ = (2 * Math.PI * 34).toFixed(1);
+  const dash = (circ - (score / 100) * circ).toFixed(1);
+
+  const measHTML = Object.entries(measures).map(([k,{v,s}]) => {
+    const c = s==='good'?'#22c55e':s==='warn'?'#f59e0b':'#ef4444';
+    const l = s==='good'?'✓ Good':s==='warn'?'⚠ Adjust':'✗ Focus here';
+    return `<div style="background:#111f33;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5a7a9a;margin-bottom:6px">${k}</div>
+      <div style="font-size:22px;font-weight:700;font-family:Georgia,serif;color:#dceeff;line-height:1;margin-bottom:4px">${v.replace(' ✓','')}</div>
+      <div style="font-size:11px;font-weight:700;color:${c}">${l}</div>
+    </div>`;
+  }).join('');
+
+  const fbHTML = feedback.map(f => {
+    const c = f.s==='good'?'#22c55e':f.s==='warn'?'#f59e0b':'#ef4444';
+    const bg = f.s==='good'?'rgba(34,197,94,0.08)':f.s==='warn'?'rgba(245,158,11,0.08)':'rgba(239,68,68,0.08)';
+    const ic = f.s==='good'?'✓':f.s==='warn'?'⚠':'✕';
+    return `<div style="background:${bg};border-left:3px solid ${c};border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px">
+      <div style="color:${c};font-weight:700;flex-shrink:0;margin-top:1px">${ic}</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#dceeff;margin-bottom:4px">${f.t}</div>
+        <div style="font-size:12px;color:#5a7a9a;line-height:1.6">${f.m}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const tipsHTML = tips.map(t => `<div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0">
+    <div style="width:5px;height:5px;border-radius:50%;background:#00d4aa;flex-shrink:0;margin-top:7px"></div>
+    <div style="font-size:12px;color:#5a7a9a;line-height:1.55">${t}</div>
+  </div>`).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>PitchIQ Report — ${date}</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  body{margin:0;padding:0;background:#050b14;color:#dceeff;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:400;line-height:1.6}
+  .page{max-width:720px;margin:0 auto;padding:48px 32px}
+  h3{font-family:'Clash Display',serif;font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#00d4aa;margin:32px 0 14px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:10px}
+  .mg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+  .footer{font-size:10px;color:#304560;margin-top:40px;border-top:1px solid rgba(255,255,255,.05);padding-top:18px;line-height:1.7}
+  @media print{body{background:#fff;color:#0a1525}.page{padding:24px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.07)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;border-radius:9px;background:#00d4aa;display:flex;align-items:center;justify-content:center;font-family:'Clash Display',serif;font-size:13px;font-weight:700;color:#050b14">PI</div>
+      <div style="font-family:'Clash Display',serif;font-size:20px;font-weight:700;letter-spacing:.01em">Pitch<span style="color:#00d4aa">IQ</span></div>
+    </div>
+    <div style="font-size:11px;color:#304560">AI Cricket Technique Report</div>
+  </div>
+  <div style="font-size:12px;color:#304560;margin-bottom:28px">
+    ${m.charAt(0).toUpperCase()+m.slice(1)} · ${h.charAt(0).toUpperCase()+h.slice(1)}-handed · ${date}
+  </div>
+
+  <!-- Score -->
+  <div style="background:#0c1929;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;display:flex;align-items:center;gap:22px;margin-bottom:24px">
+    <div style="position:relative;width:84px;height:84px;flex-shrink:0">
+      <svg width="84" height="84" viewBox="0 0 84 84" style="transform:rotate(-90deg)">
+        <circle cx="42" cy="42" r="34" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="5"/>
+        <circle cx="42" cy="42" r="34" fill="none" stroke="${sColor}" stroke-width="5" stroke-linecap="round"
+          stroke-dasharray="${circ}" stroke-dashoffset="${dash}"/>
+      </svg>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-family:'Clash Display',serif;font-size:26px;font-weight:700;color:${sColor};line-height:1">${score}</div>
+        <div style="font-size:10px;color:#5a7a9a">/100</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Clash Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:4px">${sTitle}</div>
+      <div style="font-size:13px;color:#5a7a9a">PitchIQ AI Technique Score</div>
+    </div>
+  </div>
+
+  <h3>Key Measurements</h3>
+  <div class="mg">${measHTML}</div>
+
+  <h3>Detailed Feedback</h3>
+  ${fbHTML}
+
+  <h3>Analysis Tips</h3>
+  ${tipsHTML}
+
+  <div class="footer">
+    Generated by PitchIQ · Free AI Cricket Technique Analysis · Powered by Google MediaPipe<br>
+    All analysis is performed locally in your browser — no video data was ever sent to any server.<br>
+    This report is a supplementary training tool and does not replace coaching from a qualified cricket coach.
+  </div>
+</div>
+</body></html>`;
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+  a.download = `PitchIQ-${m}-report-${date.replace(/\s/g,'-')}.html`;
+  a.click();
+}
+</script>
+</body>
+</html>

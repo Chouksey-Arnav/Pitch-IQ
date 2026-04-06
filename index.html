@@ -3,864 +3,722 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>PitchIQ — AI Cricket Coaching, Free</title>
-<meta name="description" content="Professional cricket technique analysis powered by AI. Batting, bowling, instant feedback. Free forever. No equipment needed."/>
+<title>PitchIQ — AI Cricket Coaching for Everyone</title>
+<meta name="description" content="Professional-grade cricket technique analysis. AI skeleton tracking, kinogram analysis, real-time biomechanics feedback and drills — free to start."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#03060d;--bg2:#060c18;--surface:#0b1628;--surface2:#0f1e38;--surface3:#142444;
-  --border:rgba(255,255,255,.055);--border2:rgba(255,255,255,.10);--border3:rgba(255,255,255,.16);
-  --teal:#00d4a8;--teal-lo:rgba(0,212,168,.08);--teal-mid:rgba(0,212,168,.18);--teal-glow:rgba(0,212,168,.04);
-  --lime:#b4f866;--lime-lo:rgba(180,248,102,.07);
-  --amber:#f5a623;--red:#e84040;--green:#27c97a;
-  --text:#ccdff5;--muted:#4d6b8a;--muted2:#243448;
-  --h:'Geist',system-ui,sans-serif;
-  --b:'Geist',system-ui,sans-serif;
-  --serif:'Instrument Serif',Georgia,serif;
-  --r:8px;--rl:14px;--rxl:20px;
+  --bg:#020509;--bg2:#04080f;--bg3:#060d18;
+  --s:#0a1524;--s2:#0e1d32;--s3:#132540;
+  --br:rgba(255,255,255,.048);--br2:rgba(255,255,255,.09);--br3:rgba(255,255,255,.15);
+  --teal:#00c9a0;--teal2:#00f5c4;
+  --tl:rgba(0,201,160,.07);--tm:rgba(0,201,160,.15);--tg:rgba(0,201,160,.03);
+  --amber:#f0a000;--red:#e03030;--green:#20be70;
+  --al:rgba(240,160,0,.07);--rl:rgba(224,48,48,.07);--gl:rgba(32,190,112,.07);
+  --txt:#bfd4ee;--mu:#3d5f82;--mu2:#1e3450;
+  --h:'Cabinet Grotesk',system-ui,sans-serif;
+  --b:'Cabinet Grotesk',system-ui,sans-serif;
+  --serif:'Lora',Georgia,serif;
 }
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--b);font-weight:400;line-height:1.65;overflow-x:hidden}
-::selection{background:var(--teal-mid);color:#fff}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--txt);font-family:var(--b);font-weight:400;line-height:1.65;overflow-x:hidden}
+::selection{background:var(--tm);color:#fff}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;font-family:inherit}
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
 
-/* ── NAV ──────────────────────────────────────── */
+/* ── NAV ────────────────────────────────────────── */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:900;
-  height:60px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 48px;
-  background:rgba(3,6,13,.80);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
+  position:fixed;top:0;left:0;right:0;z-index:950;
+  height:62px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 52px;
+  background:rgba(2,5,9,.82);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--br);
   transition:background .3s;
 }
-.nav-brand{display:flex;align-items:center;gap:10px}
-.nav-mark{width:32px;height:32px;border-radius:8px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#03060d;letter-spacing:.02em}
-.nav-wordmark{font-size:17px;font-weight:600;letter-spacing:-.01em}
-.nav-wordmark b{color:var(--teal)}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
-.nav-links a{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:.01em;transition:color .18s}
-.nav-links a:hover{color:var(--text)}
-.nav-right{display:flex;align-items:center;gap:10px}
-.btn-ghost-sm{font-size:13px;font-weight:500;color:var(--text);padding:7px 16px;border-radius:7px;border:1px solid var(--border2);background:transparent;cursor:pointer;transition:background .18s}
-.btn-ghost-sm:hover{background:var(--surface)}
-.btn-teal-sm{font-size:13px;font-weight:600;color:#03060d;padding:8px 20px;border-radius:7px;background:var(--teal);border:none;cursor:pointer;transition:opacity .18s,transform .14s}
-.btn-teal-sm:hover{opacity:.88;transform:translateY(-1px)}
+.nb{display:flex;align-items:center;gap:10px}
+.nm{width:33px;height:33px;border-radius:8px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#020509;letter-spacing:.02em}
+.nw{font-size:17px;font-weight:800;letter-spacing:-.01em}
+.nw b{color:var(--teal)}
+.nl{display:flex;align-items:center;gap:0;list-style:none}
+.nl a{font-size:13px;font-weight:500;color:var(--mu);padding:8px 16px;border-radius:6px;transition:color .16s,background .16s;letter-spacing:.01em}
+.nl a:hover{color:var(--txt);background:rgba(255,255,255,.04)}
+.nr{display:flex;align-items:center;gap:8px}
+.btn-ng{font-size:13px;font-weight:500;color:var(--txt);padding:7px 16px;border-radius:7px;border:1px solid var(--br2);background:transparent;cursor:pointer;transition:background .16s}
+.btn-ng:hover{background:var(--s)}
+.btn-nt{font-size:13px;font-weight:700;color:#020509;padding:8px 22px;border-radius:7px;background:var(--teal);border:none;cursor:pointer;transition:opacity .16s,transform .13s}
+.btn-nt:hover{opacity:.88;transform:translateY(-1px)}
 
-/* ── HERO ─────────────────────────────────────── */
-.hero{
-  position:relative;min-height:100vh;display:flex;flex-direction:column;
-  justify-content:center;padding:120px 48px 96px;overflow:hidden;
-}
-/* Ambient glow orbs */
-.glow-orb{position:absolute;pointer-events:none;border-radius:50%;filter:blur(80px)}
-.glow-1{width:600px;height:600px;background:rgba(0,212,168,.055);top:-80px;left:-80px}
-.glow-2{width:500px;height:500px;background:rgba(180,248,102,.03);bottom:-100px;right:100px}
-/* Grid */
-.hero-grid-lines{
-  position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
-  background-size:72px 72px;
-}
-/* Noise texture */
-.hero-noise{position:absolute;inset:0;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.hero-content{position:relative;z-index:2;max-width:1040px}
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--teal-lo);border:1px solid var(--teal-mid);
-  border-radius:40px;padding:5px 14px;margin-bottom:28px;
-  font-size:11px;font-weight:600;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;
-}
-.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse-dot 2.4s ease infinite}
-@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
-h1{
-  font-family:var(--serif);
-  font-size:clamp(56px,7.5vw,108px);
-  line-height:.92;letter-spacing:-.01em;
-  color:#fff;margin-bottom:28px;
-  font-style:normal;font-weight:400;
-}
-h1 em{font-style:italic;color:var(--teal)}
-h1 .h1-line2{display:block}
-.hero-p{font-size:clamp(16px,1.7vw,19px);color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:44px}
-.hero-p strong{color:var(--text);font-weight:500}
-.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:72px}
-.btn-hero-primary{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--teal);color:#03060d;
-  font-family:var(--b);font-size:15px;font-weight:600;
-  padding:14px 34px;border-radius:9px;border:none;cursor:pointer;
-  transition:opacity .18s,transform .15s;letter-spacing:.01em;
-}
-.btn-hero-primary:hover{opacity:.88;transform:translateY(-2px)}
-.btn-hero-secondary{
-  display:inline-flex;align-items:center;gap:8px;
-  font-family:var(--b);font-size:15px;font-weight:400;color:var(--text);
-  padding:13px 30px;border-radius:9px;
-  border:1px solid var(--border2);background:transparent;cursor:pointer;
-  transition:background .18s,transform .15s;
-}
-.btn-hero-secondary:hover{background:var(--surface);transform:translateY(-2px)}
-/* Stat bar */
-.hero-stats{display:flex;gap:0;flex-wrap:wrap}
-.hstat{padding-right:48px;margin-right:48px;border-right:1px solid var(--border)}
-.hstat:last-child{padding-right:0;margin-right:0;border-right:none}
-.hstat-n{font-family:var(--serif);font-size:40px;color:#fff;line-height:1;margin-bottom:4px}
-.hstat-n sup{font-size:20px;color:var(--teal)}
-.hstat-l{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
-/* Floating card */
-.hero-card-float{
-  position:absolute;right:60px;top:50%;transform:translateY(-50%);
-  width:min(400px,36vw);z-index:2;
-  animation:float-card 6s ease-in-out infinite;
-}
-@keyframes float-card{0%,100%{transform:translateY(-50%) translateY(0)}50%{transform:translateY(-50%) translateY(-14px)}}
-.hero-card-inner{
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:18px;padding:22px;
-}
-.hc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.hc-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
-.hc-badge{
-  display:flex;align-items:center;gap:5px;
-  background:rgba(39,201,122,.1);border:1px solid rgba(39,201,122,.2);
-  border-radius:20px;padding:3px 10px;
-  font-size:10px;font-weight:600;color:var(--green);
-}
-.hc-score-row{display:flex;align-items:flex-end;gap:14px;margin-bottom:20px}
-.hc-score{font-family:var(--serif);font-size:64px;color:#fff;line-height:1}
-.hc-score span{font-size:24px;color:var(--muted)}
-.hc-verdict{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
-.hc-sub{font-size:11px;color:var(--muted);line-height:1.5}
-.hc-bars{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.hc-bar-r{display:flex;align-items:center;gap:10px}
-.hc-bar-l{font-size:10px;color:var(--muted);width:80px;flex-shrink:0}
-.hc-bar-t{flex:1;height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
-.hc-bar-f{height:100%;border-radius:2px}
-.f-good{background:var(--green)}.f-warn{background:var(--amber)}.f-bad{background:var(--red)}
-.hc-drill{
-  background:rgba(0,212,168,.06);border:1px solid var(--teal-mid);
-  border-radius:10px;padding:10px 12px;
-}
-.hc-drill-label{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:5px}
-.hc-drill-text{font-size:11px;color:var(--text);line-height:1.55}
+/* ── HERO ────────────────────────────────────────── */
+.hero{position:relative;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:120px 52px 80px;gap:60px;overflow:hidden}
+/* Background layers */
+.hero-bg-glow{position:absolute;pointer-events:none;border-radius:50%;filter:blur(100px)}
+.hbg1{width:700px;height:700px;background:rgba(0,201,160,.045);top:-150px;left:-200px}
+.hbg2{width:500px;height:500px;background:rgba(0,245,196,.02);bottom:-100px;right:0}
+.hero-grid{position:absolute;inset:0;pointer-events:none;opacity:.018;background:linear-gradient(rgba(0,245,196,1) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,196,1) 1px,transparent 1px);background-size:64px 64px}
+/* Left content */
+.hero-l{position:relative;z-index:2}
+.h-eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--tl);border:1px solid var(--tm);border-radius:40px;padding:5px 14px;margin-bottom:26px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase}
+.h-edot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:blink 2.2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+h1{font-family:var(--h);font-size:clamp(52px,5.5vw,84px);font-weight:900;line-height:.92;letter-spacing:-.025em;color:#fff;margin-bottom:26px}
+h1 .italic{font-family:var(--serif);font-weight:400;font-style:italic;color:var(--teal)}
+.hero-p{font-size:clamp(15px,1.4vw,17px);color:var(--mu);line-height:1.72;max-width:500px;margin-bottom:40px}
+.hero-p strong{color:var(--txt);font-weight:500}
+.hctas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:56px}
+.btn-hp{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#020509;font-family:var(--b);font-size:15px;font-weight:700;padding:14px 34px;border-radius:9px;border:none;cursor:pointer;transition:opacity .16s,transform .14s;letter-spacing:.01em}
+.btn-hp:hover{opacity:.88;transform:translateY(-2px)}
+.btn-hs{display:inline-flex;align-items:center;gap:7px;font-family:var(--b);font-size:15px;font-weight:500;color:var(--txt);padding:13px 28px;border-radius:9px;border:1px solid var(--br2);background:transparent;cursor:pointer;transition:background .16s,transform .14s}
+.btn-hs:hover{background:var(--s);transform:translateY(-2px)}
+/* Stats */
+.hstats{display:flex;gap:0;flex-wrap:wrap}
+.hst{padding-right:40px;margin-right:40px;border-right:1px solid var(--br)}
+.hst:last-child{border-right:none;padding-right:0;margin-right:0}
+.hst-n{font-family:var(--h);font-size:36px;font-weight:900;line-height:1;color:#fff;letter-spacing:-.02em}
+.hst-n sup{font-size:18px;color:var(--teal)}
+.hst-l{font-size:10px;font-weight:600;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+/* Right: Product mockup */
+.hero-r{position:relative;z-index:2}
+.product-mockup{background:var(--s);border:1px solid var(--br2);border-radius:18px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5)}
+.pm-bar{background:var(--s2);border-bottom:1px solid var(--br);padding:10px 14px;display:flex;align-items:center;gap:8px}
+.pm-dot{width:9px;height:9px;border-radius:50%}
+.pm-label{font-size:11px;font-weight:600;color:var(--mu);margin-left:auto;letter-spacing:.05em}
+/* Video analysis preview inside mockup */
+.pm-video-area{background:#000810;position:relative;aspect-ratio:16/9;overflow:hidden}
+.pm-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+/* Animated skeleton SVG */
+.skel-svg{width:60%;max-width:200px;opacity:.9}
+.skel-node{r:4;fill:rgba(0,201,160,.95)}
+.skel-line{stroke:rgba(0,201,160,.6);stroke-width:2.5;stroke-linecap:round}
+.skel-angle{fill:none;stroke:rgba(0,245,196,.7);stroke-width:2;stroke-dasharray:3 2}
+/* Floating metric chips */
+.metric-chip{position:absolute;display:flex;align-items:center;gap:6px;background:rgba(10,21,36,.88);backdrop-filter:blur(8px);border:1px solid var(--br2);border-radius:8px;padding:6px 10px;font-size:11px;white-space:nowrap}
+.mc-good{border-color:rgba(32,190,112,.3)}
+.mc-warn{border-color:rgba(240,160,0,.3)}
+.mc-bad{border-color:rgba(224,48,48,.3)}
+.mc-icon{font-size:10px}
+.mc-label{color:var(--mu)}
+.mc-val{font-weight:700}
+.mc-val.g{color:var(--green)}.mc-val.w{color:var(--amber)}.mc-val.b{color:var(--red)}
+/* Bottom metrics strip */
+.pm-metrics{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--br)}
+.pm-m{padding:12px 14px;border-right:1px solid var(--br)}
+.pm-m:last-child{border-right:none}
+.pm-m-lbl{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
+.pm-m-val{font-family:var(--h);font-size:18px;font-weight:800;color:#fff;line-height:1}
+.pm-m-st{font-size:10px;font-weight:600;margin-top:3px}
+.pm-m-g{color:var(--green)}.pm-m-w{color:var(--amber)}.pm-m-b{color:var(--red)}
 
-/* ── MARQUEE ──────────────────────────────────── */
-.marquee-strip{
-  background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-  padding:16px 0;overflow:hidden;
-}
-.marquee-inner{display:flex;gap:56px;white-space:nowrap;animation:scroll-left 28s linear infinite}
-.m-item{display:flex;align-items:center;gap:9px;flex-shrink:0;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-.m-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0}
-@keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ── MARQUEE ─────────────────────────────────────── */
+.marquee{background:var(--s);border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:14px 0;overflow:hidden}
+.marquee-track{display:flex;gap:52px;white-space:nowrap;animation:mq 26s linear infinite}
+.mi{display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:12px;font-weight:600;color:var(--mu);letter-spacing:.07em;text-transform:uppercase}
+.mi-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ── SECTION SHARED ───────────────────────────── */
-.section{padding:96px 48px}
-.s-tag{display:block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
-h2{font-family:var(--serif);font-size:clamp(36px,4.5vw,60px);font-weight:400;line-height:.96;letter-spacing:-.01em;color:#fff;margin-bottom:16px}
-h2 em{font-style:italic;color:var(--teal)}
-.s-p{font-size:16px;color:var(--muted);line-height:1.7;max-width:520px}
-.s-center{text-align:center;display:flex;flex-direction:column;align-items:center;margin-bottom:60px}
-.s-center .s-p{text-align:center}
+/* ── SECTIONS ────────────────────────────────────── */
+.section{padding:100px 52px}
+.sc{text-align:center;max-width:660px;margin:0 auto 64px;display:flex;flex-direction:column;align-items:center}
+.stag{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+h2{font-family:var(--h);font-size:clamp(36px,4vw,58px);font-weight:900;line-height:.94;letter-spacing:-.02em;color:#fff;margin-bottom:14px}
+h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--teal)}
+.sp{font-size:16px;color:var(--mu);line-height:1.7}
 
-/* ── BENTO FEATURES ───────────────────────────── */
-.features-bg{background:var(--bg2)}
-.bento{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:auto;gap:12px;max-width:1200px;margin:0 auto}
-.bento-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);
-  padding:32px;overflow:hidden;position:relative;
-  transition:border-color .22s,background .22s;
-}
-.bento-card:hover{border-color:var(--border2);background:var(--surface2)}
-.bento-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,168,.4),transparent)}
-.bc-1{grid-column:span 7}
-.bc-2{grid-column:span 5}
-.bc-3{grid-column:span 5}
-.bc-4{grid-column:span 7}
-.bc-icon{width:44px;height:44px;border-radius:12px;background:var(--teal-lo);border:1px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:20px}
-.bc-title{font-family:var(--serif);font-size:22px;font-weight:400;color:#fff;line-height:1.2;margin-bottom:10px}
-.bc-body{font-size:14px;color:var(--muted);line-height:1.7}
-.bc-body strong{color:var(--text);font-weight:500}
-.bc-visual{margin-top:20px}
-/* Live analysis preview in card 1 */
-.analysis-preview{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px}
-.ap-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
-.ap-row:last-child{border-bottom:none}
-.ap-label{font-size:11px;color:var(--muted)}
-.ap-val{font-size:11px;font-weight:600;color:var(--text)}
-.ap-val.good{color:var(--green)}.ap-val.warn{color:var(--amber)}.ap-val.bad{color:var(--red)}
-/* Privacy card visual */
-.privacy-vis{
-  margin-top:16px;background:var(--bg);border:1px solid var(--border);
-  border-radius:12px;padding:14px;
-  display:flex;flex-direction:column;gap:7px;
-}
-.pv-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
-.pv-icon{width:16px;height:16px;border-radius:50%;background:var(--teal-lo);border:1px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--teal)}
+/* ── FEATURE BENTO ───────────────────────────────── */
+.feat-bg{background:var(--bg2)}
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;max-width:1240px;margin:0 auto}
+.bc{background:var(--s);border:1px solid var(--br);border-radius:18px;padding:30px;overflow:hidden;position:relative;transition:border-color .2s,background .2s}
+.bc:hover{border-color:var(--br2);background:var(--s2)}
+.bc::after{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,201,160,.35),transparent)}
+.bc-1{grid-column:span 7}.bc-2{grid-column:span 5}.bc-3{grid-column:span 4}.bc-4{grid-column:span 4}.bc-5{grid-column:span 4}
+.bc-ico{width:42px;height:42px;border-radius:11px;background:var(--tl);border:1px solid var(--tm);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:18px}
+.bc-t{font-family:var(--h);font-size:19px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:9px;letter-spacing:-.01em}
+.bc-b{font-size:13px;color:var(--mu);line-height:1.7}
+.bc-b strong{color:var(--txt);font-weight:500}
+/* Mini feature previews */
+.bc-preview{margin-top:18px}
+.skel-preview-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--br);font-size:11px}
+.skel-preview-row:last-child{border-bottom:none}
+.spr-label{color:var(--mu);flex:1}
+.spr-bar{width:80px;height:3px;background:var(--br2);border-radius:2px;overflow:hidden}
+.spr-fill{height:100%;border-radius:2px}
+.fill-g{background:var(--green)}.fill-w{background:var(--amber)}.fill-b{background:var(--red)}
+.spr-val{font-weight:700;font-size:10px;width:36px;text-align:right}
+.val-g{color:var(--green)}.val-w{color:var(--amber)}.val-b{color:var(--red)}
+/* Kinogram preview */
+.kinogram-preview{display:flex;align-items:flex-end;justify-content:center;gap:-4px;margin-top:12px;height:80px;position:relative}
+.kp-skel{position:absolute;bottom:0}
+.kp-s{opacity:.15;transform-origin:center bottom}
+.kp-s:nth-child(1){opacity:.12;transform:translateX(-44px) scaleX(.88)}
+.kp-s:nth-child(2){opacity:.22;transform:translateX(-26px) scaleX(.93)}
+.kp-s:nth-child(3){opacity:.35;transform:translateX(-10px) scaleX(.97)}
+.kp-s:nth-child(4){opacity:.7;transform:translateX(8px)}
+.kp-s:nth-child(5){opacity:1;transform:translateX(28px)}
+/* Privacy items */
+.priv-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--br);font-size:12px;color:var(--txt)}
+.priv-row:last-child{border-bottom:none}
+.priv-ico{width:18px;height:18px;border-radius:50%;background:var(--tl);border:1px solid var(--tm);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--teal);flex-shrink:0}
 
-/* ── HOW IT WORKS ─────────────────────────────── */
-.hiw-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto}
-.hiw-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);
-  padding:36px 30px;position:relative;overflow:hidden;
-}
-.hiw-num{
-  font-family:var(--serif);font-size:100px;font-weight:400;line-height:1;
-  color:var(--teal);opacity:.07;position:absolute;right:18px;top:8px;pointer-events:none;
-  letter-spacing:-.02em;font-style:italic;
-}
-.hiw-icon{width:46px;height:46px;border-radius:12px;background:var(--teal-lo);border:1px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px}
-.hiw-t{font-family:var(--serif);font-size:20px;font-weight:400;color:#fff;margin-bottom:10px;line-height:1.2}
-.hiw-b{font-size:13px;color:var(--muted);line-height:1.7}
+/* ── HOW IT WORKS ────────────────────────────────── */
+.hiw-bg{background:var(--bg)}
+.hiw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1100px;margin:0 auto}
+.hiw-card{background:var(--s);border:1px solid var(--br);border-radius:18px;padding:34px 28px;position:relative;overflow:hidden}
+.hiw-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent)}
+.hiw-n{font-family:var(--serif);font-size:96px;font-weight:400;font-style:italic;line-height:1;color:var(--teal);opacity:.07;position:absolute;top:8px;right:14px;pointer-events:none}
+.hiw-ico{width:44px;height:44px;border-radius:11px;background:var(--tl);border:1px solid var(--tm);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:18px}
+.hiw-t{font-family:var(--h);font-size:18px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-.01em}
+.hiw-b{font-size:13px;color:var(--mu);line-height:1.7}
 
-/* ── COMPARISON ───────────────────────────────── */
+/* ── COMPARISON TABS ─────────────────────────────── */
 .comp-bg{background:var(--bg2)}
 .comp-wrap{max-width:1100px;margin:0 auto}
-.comp-tabs{display:flex;gap:6px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:36px;width:fit-content}
-.comp-tab{
-  padding:9px 20px;font-family:var(--b);font-size:13px;font-weight:500;
-  color:var(--muted);background:none;border:none;border-radius:8px;cursor:pointer;
-  transition:background .18s,color .18s;white-space:nowrap;
-}
-.comp-tab.active{background:var(--teal);color:#03060d;font-weight:600}
-.comp-panel{display:none}
-.comp-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fade-in .25s ease}
-@keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.comp-pitchiq,.comp-other{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:30px}
-.comp-pitchiq{border-color:var(--teal-mid);background:var(--teal-lo)}
-.comp-product-name{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.comp-pitchiq .comp-product-name{color:var(--teal)}
-.comp-h{font-family:var(--serif);font-size:24px;color:#fff;margin-bottom:20px;font-weight:400}
-.comp-rows{display:flex;flex-direction:column;gap:0}
-.comp-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
-.comp-row:last-child{border-bottom:none}
-.comp-row-icon{font-size:13px;flex-shrink:0;margin-top:1px;width:16px}
-.comp-row-text{font-size:13px;color:var(--text);line-height:1.5}
-.comp-row-text.muted{color:var(--muted)}
-.icon-yes{color:var(--green)}.icon-no{color:var(--muted2)}.icon-par{color:var(--amber)}
-.comp-bottom{margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
-.comp-verdict{font-size:12px;font-weight:600;letter-spacing:.04em}
-.comp-pitchiq .comp-verdict{color:var(--green)}
-.comp-other .comp-verdict{color:var(--muted)}
+.comp-tabs{display:flex;gap:4px;padding:4px;background:var(--s);border:1px solid var(--br);border-radius:11px;margin-bottom:28px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.comp-tabs::-webkit-scrollbar{display:none}
+.ctab{padding:9px 18px;font-family:var(--b);font-size:12px;font-weight:600;color:var(--mu);background:none;border-radius:7px;border:none;cursor:pointer;transition:background .16s,color .16s;white-space:nowrap}
+.ctab.on{background:var(--teal);color:#020509}
+.cpanel{display:none;animation:cfade .22s ease}
+.cpanel.on{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@keyframes cfade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.cp-pitchiq,.cp-other{background:var(--s);border:1px solid var(--br);border-radius:18px;padding:28px}
+.cp-pitchiq{border-color:var(--tm);background:var(--tl)}
+.cp-brand{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:7px}
+.cp-pitchiq .cp-brand{color:var(--teal)}
+.cp-h{font-family:var(--h);font-size:22px;font-weight:800;color:#fff;margin-bottom:18px;letter-spacing:-.01em}
+.cp-rows{display:flex;flex-direction:column;gap:0}
+.cp-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--br)}
+.cp-row:last-child{border-bottom:none}
+.cp-icon{font-size:12px;flex-shrink:0;margin-top:2px;width:15px}
+.icon-y{color:var(--green)}.icon-n{color:var(--mu2)}.icon-p{color:var(--amber)}
+.cp-txt{font-size:12px;color:var(--txt);line-height:1.5}
+.cp-txt.mu{color:var(--mu)}
+.cp-foot{margin-top:18px;padding-top:14px;border-top:1px solid var(--br)}
+.cp-verdict{font-size:11px;font-weight:700;letter-spacing:.04em}
+.cp-pitchiq .cp-verdict{color:var(--green)}
+.cp-other .cp-verdict{color:var(--mu)}
 
-/* ── TESTIMONIALS ─────────────────────────────── */
-.testi-bg{background:var(--bg)}
-.testi-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;max-width:1100px;margin:0 auto}
-.testi-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);
-  padding:28px;display:flex;flex-direction:column;
-}
-.testi-stars{display:flex;gap:2px;margin-bottom:16px}
+/* ── STATS COUNTER ───────────────────────────────── */
+.stats-section{background:var(--bg)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--br);border:1px solid var(--br);border-radius:18px;overflow:hidden;max-width:1100px;margin:0 auto}
+.sg{background:var(--bg);padding:40px 32px;text-align:center}
+.sg-n{font-family:var(--h);font-size:clamp(44px,5vw,72px);font-weight:900;color:#fff;line-height:1;letter-spacing:-.025em;margin-bottom:8px}
+.sg-n sup{font-size:.45em;color:var(--teal);vertical-align:super}
+.sg-l{font-size:13px;color:var(--mu);line-height:1.5;max-width:200px;margin:0 auto}
+
+/* ── TESTIMONIALS ────────────────────────────────── */
+.testi-bg{background:var(--bg2)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:1100px;margin:0 auto}
+.tc{background:var(--s);border:1px solid var(--br);border-radius:18px;padding:26px}
+.tc-stars{display:flex;gap:2px;margin-bottom:14px}
 .star{font-size:13px;color:var(--amber)}
-.testi-q{
-  font-family:var(--serif);font-size:17px;font-weight:400;font-style:italic;
-  color:#fff;line-height:1.55;margin-bottom:20px;flex:1;
+.tc-q{font-family:var(--serif);font-size:16px;font-style:italic;font-weight:400;color:#fff;line-height:1.6;margin-bottom:18px}
+.tc-a{display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid var(--br)}
+.tc-av{width:36px;height:36px;border-radius:50%;background:var(--tl);border:1px solid var(--tm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--teal);flex-shrink:0}
+.tc-name{font-size:12px;font-weight:600;color:var(--txt)}
+.tc-role{font-size:11px;color:var(--mu)}
+
+/* ── PRICING ─────────────────────────────────────── */
+.pricing-bg{background:var(--bg)}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:840px;margin:0 auto}
+.pc{background:var(--s);border:1px solid var(--br);border-radius:18px;padding:34px 28px;display:flex;flex-direction:column;position:relative}
+.pc.feat{background:var(--tl);border-color:var(--tm)}
+.feat-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--teal);color:#020509;font-size:10px;font-weight:700;padding:3px 14px;border-radius:20px;letter-spacing:.07em;white-space:nowrap}
+.plan-name{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
+.pc.feat .plan-name{color:var(--teal)}
+.price-row{display:flex;align-items:flex-end;gap:4px;margin-bottom:5px}
+.price-sym{font-family:var(--h);font-size:24px;font-weight:700;color:var(--mu);margin-bottom:8px}
+.price-amt{font-family:var(--h);font-size:58px;font-weight:900;color:#fff;line-height:1;letter-spacing:-.03em}
+.price-per{font-size:13px;color:var(--mu);margin-bottom:20px}
+.plan-desc{font-size:13px;color:var(--mu);line-height:1.6;margin-bottom:24px;flex:1}
+.plan-btn{width:100%;padding:13px;border-radius:8px;font-family:var(--b);font-size:14px;font-weight:700;border:none;cursor:pointer;margin-bottom:24px;transition:opacity .16s,transform .13s;letter-spacing:.01em}
+.plan-btn:hover{opacity:.88;transform:translateY(-1px)}
+.pb-free{background:var(--s2);color:var(--txt);border:1px solid var(--br2)}
+.pb-paid{background:var(--teal);color:#020509}
+.pfeats{display:flex;flex-direction:column;gap:9px}
+.pf{display:flex;align-items:flex-start;gap:9px;font-size:12px}
+.pf-i{font-size:11px;flex-shrink:0;margin-top:1px;width:14px;color:var(--green)}
+.pf-mu .pf-i{color:var(--mu2)}
+.pf-t{color:var(--txt)}
+.pf-mu .pf-t{color:var(--mu)}
+.pdiv{height:1px;background:var(--br);margin:7px 0}
+
+/* ── FAQ ─────────────────────────────────────────── */
+.faq-bg{background:var(--bg2)}
+.faq-wrap{max-width:760px;margin:0 auto;border:1px solid var(--br);border-radius:18px;overflow:hidden}
+.fq{border-bottom:1px solid var(--br)}
+.fq:last-child{border-bottom:none}
+.fq-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:var(--s);font-family:var(--b);font-size:15px;font-weight:500;color:var(--txt);text-align:left;border:none;cursor:pointer;transition:background .16s;gap:14px}
+.fq-btn:hover,.fq-btn.open{background:var(--s2)}
+.fq-chev{width:20px;height:20px;border-radius:50%;border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--mu);transition:transform .22s,border-color .16s}
+.fq-btn.open .fq-chev{transform:rotate(180deg);border-color:var(--teal);color:var(--teal)}
+.fq-body{display:none;padding:0 24px 20px;font-size:14px;color:var(--mu);line-height:1.78}
+.fq-body.open{display:block}
+.fq-body strong{color:var(--txt);font-weight:500}
+
+/* ── FINAL CTA ───────────────────────────────────── */
+.cta-section{
+  padding:120px 52px;text-align:center;
+  background:radial-gradient(ellipse 90% 70% at 50% 100%,rgba(0,201,160,.055) 0%,transparent 70%),var(--bg);
+  border-top:1px solid var(--br);
 }
-.testi-author{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border)}
-.testi-av{width:38px;height:38px;border-radius:50%;background:var(--teal-lo);border:1px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--teal);flex-shrink:0}
-.testi-name{font-size:13px;font-weight:500;color:var(--text)}
-.testi-role{font-size:11px;color:var(--muted)}
+.cta-section h2{font-size:clamp(44px,6vw,76px);margin-bottom:20px}
+.cta-section .sp{max-width:460px;margin:0 auto 40px}
+.cta-btns{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.cta-note{margin-top:18px;font-size:12px;color:var(--mu2)}
+.cta-note span{color:var(--teal);font-weight:600}
 
-/* ── PRICING ──────────────────────────────────── */
-.pricing-bg{background:var(--bg2)}
-.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:820px;margin:0 auto}
-.price-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rxl);padding:36px 30px;display:flex;flex-direction:column;position:relative}
-.price-card.featured{background:var(--teal-lo);border-color:var(--teal-mid)}
-.featured-label{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--teal);color:#03060d;font-size:10px;font-weight:700;padding:3px 14px;border-radius:20px;letter-spacing:.07em;white-space:nowrap}
-.plan-badge{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
-.price-card.featured .plan-badge{color:var(--teal)}
-.price-amount{display:flex;align-items:flex-end;gap:4px;margin-bottom:6px}
-.price-dollar{font-family:var(--serif);font-size:28px;color:var(--muted);margin-bottom:10px}
-.price-num{font-family:var(--serif);font-size:60px;color:#fff;line-height:1;letter-spacing:-.02em}
-.price-per{font-size:13px;color:var(--muted);margin-bottom:22px}
-.plan-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:26px;flex:1}
-.plan-cta{width:100%;padding:13px;border-radius:8px;font-family:var(--b);font-size:14px;font-weight:600;border:none;cursor:pointer;margin-bottom:26px;transition:opacity .18s,transform .14s}
-.plan-cta:hover{opacity:.88;transform:translateY(-1px)}
-.plan-cta-free{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}
-.plan-cta-paid{background:var(--teal);color:#03060d}
-.plan-feats{display:flex;flex-direction:column;gap:9px}
-.pf{display:flex;align-items:flex-start;gap:9px;font-size:13px}
-.pf-icon{font-size:12px;flex-shrink:0;margin-top:1px;color:var(--green);width:16px}
-.pf-muted .pf-icon{color:var(--muted2)}
-.pf-t{color:var(--text)}
-.pf-muted .pf-t{color:var(--muted)}
-.pf-div{width:100%;height:1px;background:var(--border);margin:6px 0}
+/* ── FOOTER ──────────────────────────────────────── */
+footer{background:var(--bg);border-top:1px solid var(--br);padding:52px 52px 36px}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+.fa p{font-size:13px;color:var(--mu);line-height:1.7;margin-top:12px;max-width:260px}
+.fcol-h{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);margin-bottom:14px}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.fcol a{font-size:13px;color:var(--mu);transition:color .16s}
+.fcol a:hover{color:var(--txt)}
+.fb2{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-top:1px solid var(--br);padding-top:24px}
+.fcopy{font-size:12px;color:var(--mu2)}
+.fbadges{display:flex;gap:8px;flex-wrap:wrap}
+.fbadge{display:flex;align-items:center;gap:5px;background:var(--s);border:1px solid var(--br);border-radius:6px;padding:5px 11px;font-size:11px;color:var(--mu);font-weight:500}
 
-/* ── FAQ ──────────────────────────────────────── */
-.faq-wrap{max-width:740px;margin:0 auto;border:1px solid var(--border);border-radius:var(--rxl);overflow:hidden}
-.faq-item{border-bottom:1px solid var(--border)}
-.faq-item:last-child{border-bottom:none}
-.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 26px;background:var(--surface);font-family:var(--b);font-size:15px;font-weight:400;color:var(--text);text-align:left;border:none;cursor:pointer;transition:background .18s;gap:16px}
-.faq-q:hover{background:var(--surface2)}
-.faq-q.open{background:var(--surface2)}
-.faq-chevron{width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--muted);transition:transform .24s,border-color .18s}
-.faq-q.open .faq-chevron{transform:rotate(180deg);border-color:var(--teal);color:var(--teal)}
-.faq-a{display:none;padding:0 26px 20px;font-size:14px;color:var(--muted);line-height:1.78}
-.faq-a.open{display:block}
-.faq-a strong{color:var(--text);font-weight:500}
+/* ── ANIMATIONS ──────────────────────────────────── */
+.fu{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fu.in{opacity:1;transform:none}
+.fu.d1{transition-delay:.07s}.fu.d2{transition-delay:.14s}.fu.d3{transition-delay:.21s}
 
-/* ── FINAL CTA ────────────────────────────────── */
-.final-cta-section{
-  padding:120px 48px;
-  background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,212,168,.06) 0%,transparent 70%),var(--bg);
-  text-align:center;border-top:1px solid var(--border);
-}
-.final-cta-section h2{font-size:clamp(44px,6vw,80px);margin-bottom:22px}
-.final-cta-section p{font-size:17px;color:var(--muted);max-width:460px;margin:0 auto 44px;line-height:1.7}
-.cta-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
-.final-note{margin-top:18px;font-size:12px;color:var(--muted2)}
-.final-note span{color:var(--teal);font-weight:500}
+/* Counter animation */
+.counter[data-target]{opacity:0;transition:opacity .4s}
+.counter[data-target].counting{opacity:1}
 
-/* ── FOOTER ───────────────────────────────────── */
-footer{background:var(--bg);border-top:1px solid var(--border);padding:52px 48px 36px}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
-.footer-brand p{font-size:13px;color:var(--muted);line-height:1.7;margin-top:12px;max-width:260px}
-.footer-col-h{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:14px}
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
-.footer-col a{font-size:13px;color:var(--muted);transition:color .18s}
-.footer-col a:hover{color:var(--text)}
-.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-top:1px solid var(--border);padding-top:26px}
-.footer-copy{font-size:12px;color:var(--muted2)}
-.footer-trust{display:flex;gap:8px;flex-wrap:wrap}
-.trust-badge{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 11px;font-size:11px;color:var(--muted);font-weight:500}
-
-/* ── ANIMATE ──────────────────────────────────── */
-.fade-up{opacity:0;transform:translateY(22px);transition:opacity .64s ease,transform .64s ease}
-.fade-up.in{opacity:1;transform:none}
-.fade-up.d1{transition-delay:.07s}.fade-up.d2{transition-delay:.14s}.fade-up.d3{transition-delay:.21s}
-
-/* ── RESPONSIVE ───────────────────────────────── */
+/* ── RESPONSIVE ──────────────────────────────────── */
 @media(max-width:1100px){
-  .hero-card-float{display:none}
+  .hero{grid-template-columns:1fr;padding:110px 32px 80px}
+  .hero-r{display:none}
   .bento{grid-template-columns:1fr 1fr}
-  .bc-1,.bc-2,.bc-3,.bc-4{grid-column:span 1}
-  .testi-grid{grid-template-columns:1fr 1fr}
-  .footer-top{grid-template-columns:1fr 1fr;gap:28px}
+  .bc-1,.bc-2,.bc-3,.bc-4,.bc-5{grid-column:span 1}
+  .hiw-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .pricing-grid{max-width:460px;margin:0 auto;grid-template-columns:1fr}
+  .ft{grid-template-columns:1fr 1fr;gap:28px}
 }
 @media(max-width:900px){
-  nav{padding:0 20px}.nav-links{display:none}
-  .hero{padding:100px 20px 72px}
+  nav{padding:0 20px}.nl{display:none}
   .section{padding:72px 20px}
-  .hiw-row{grid-template-columns:1fr}
-  .comp-panel.active{grid-template-columns:1fr}
-  .pricing-grid{grid-template-columns:1fr;max-width:460px;margin:0 auto}
-  .testi-grid{grid-template-columns:1fr}
+  .bento{grid-template-columns:1fr}
+  .cpanel.on{grid-template-columns:1fr}
   footer{padding:40px 20px 28px}
-  .footer-top{grid-template-columns:1fr}
-  .footer-bottom{flex-direction:column;text-align:center}
+  .ft{grid-template-columns:1fr}
+  .fb2{flex-direction:column;text-align:center}
+  .cta-section{padding:80px 20px}
 }
 @media(max-width:600px){
-  h1{font-size:clamp(48px,13vw,66px)}
-  .hero-stats{gap:24px}.hstat{padding-right:24px;margin-right:24px}
-  .bento{grid-template-columns:1fr}
-  .comp-tabs{flex-wrap:wrap;width:100%}
-  .cta-row{flex-direction:column;align-items:center}
+  h1{font-size:clamp(46px,12vw,62px)}
+  .hstats{gap:22px}.hst{padding-right:22px;margin-right:22px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .cta-btns{flex-direction:column;align-items:center}
 }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav id="main-nav">
-  <div class="nav-brand">
-    <div class="nav-mark">PI</div>
-    <div class="nav-wordmark">Pitch<b>IQ</b></div>
-  </div>
-  <ul class="nav-links">
+<nav id="nav">
+  <div class="nb"><div class="nm">PI</div><div class="nw">Pitch<b>IQ</b></div></div>
+  <ul class="nl">
     <li><a href="#features">Features</a></li>
-    <li><a href="#how">How It Works</a></li>
+    <li><a href="#hiw">How It Works</a></li>
     <li><a href="#compare">Compare</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="btn-ghost-sm" onclick="window.location='app.html'">Log In</button>
-    <button class="btn-teal-sm" onclick="window.location='app.html'">Try Free →</button>
+  <div class="nr">
+    <button class="btn-ng" onclick="location.href='app.html'">Sign In</button>
+    <button class="btn-nt" onclick="location.href='app.html'">Try Free →</button>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="glow-orb glow-1"></div>
-  <div class="glow-orb glow-2"></div>
-  <div class="hero-grid-lines"></div>
-  <div class="hero-noise"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow"><span class="eyebrow-dot"></span>AI-Powered Cricket Analysis</div>
-    <h1>
-      Coaching that knows<br>
-      <em>your technique.</em><br>
-      <span class="h1-line2">Instantly.</span>
-    </h1>
+  <div class="hero-bg-glow hbg1"></div>
+  <div class="hero-bg-glow hbg2"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-l">
+    <div class="h-eyebrow"><span class="h-edot"></span>Professional Cricket AI</div>
+    <h1>The coaching<br>every cricketer<br><span class="italic">deserves.</span></h1>
     <p class="hero-p">
-      The coaching feedback that professional teams take for granted.
-      <strong>Now available to every cricketer, everywhere</strong> — for free.
-      Upload a video, get precise technical analysis in seconds.
+      IPL franchises have biomechanics labs and full analytics departments.
+      <strong>Now that same level of insight is available to you</strong> — free, private, instant.
+      Upload a video and get coaching-level feedback in seconds.
     </p>
-    <div class="hero-ctas">
-      <button class="btn-hero-primary" onclick="window.location='app.html'">
-        Analyze My Technique — Free
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="hctas">
+      <button class="btn-hp" onclick="location.href='app.html'">
+        Analyze My Technique Free
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <button class="btn-hero-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+      <button class="btn-hs" onclick="document.getElementById('hiw').scrollIntoView({behavior:'smooth'})">See how it works</button>
     </div>
-    <div class="hero-stats">
-      <div class="hstat"><div class="hstat-n">6<sup>+</sup></div><div class="hstat-l">Biomechanic checks</div></div>
-      <div class="hstat"><div class="hstat-n">$<sup>0</sup></div><div class="hstat-l">Free forever tier</div></div>
-      <div class="hstat"><div class="hstat-n">100<sup>%</sup></div><div class="hstat-l">Private — on device</div></div>
-      <div class="hstat"><div class="hstat-n">2<sup>nd</sup></div><div class="hstat-l">Most watched sport</div></div>
+    <div class="hstats">
+      <div class="hst"><div class="hst-n">33<sup>pts</sup></div><div class="hst-l">Body landmarks tracked</div></div>
+      <div class="hst"><div class="hst-n">$<sup>0</sup></div><div class="hst-l">Free forever tier</div></div>
+      <div class="hst"><div class="hst-n">100<sup>%</sup></div><div class="hst-l">Private · on-device</div></div>
     </div>
   </div>
-  <!-- Floating result card -->
-  <div class="hero-card-float">
-    <div class="hero-card-inner">
-      <div class="hc-header">
-        <div class="hc-tag">AI Analysis</div>
-        <div class="hc-badge">✓ Strong Technique</div>
+
+  <!-- Product mockup -->
+  <div class="hero-r">
+    <div class="product-mockup">
+      <div class="pm-bar">
+        <div class="pm-dot" style="background:#e04040"></div>
+        <div class="pm-dot" style="background:#f0a000;margin-left:4px"></div>
+        <div class="pm-dot" style="background:#20be70;margin-left:4px"></div>
+        <div class="pm-label">PitchIQ — Skeleton Analysis</div>
       </div>
-      <div class="hc-score-row">
-        <div class="hc-score">78<span>/100</span></div>
-        <div><div class="hc-verdict">Front elbow: excellent</div><div class="hc-sub">Measured at 112° — ideal range for a cover drive</div></div>
+      <div class="pm-video-area">
+        <!-- Animated skeleton -->
+        <div class="pm-overlay">
+          <svg class="skel-svg" viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
+            <style>
+              .pulse{animation:sk-pulse 3s ease-in-out infinite}
+              @keyframes sk-pulse{0%,100%{opacity:.9}50%{opacity:.6}}
+            </style>
+            <!-- Spine + Body -->
+            <line x1="100" y1="60" x2="100" y2="130" class="skel-line pulse"/>
+            <!-- Shoulders -->
+            <line x1="60" y1="85" x2="140" y2="85" class="skel-line pulse"/>
+            <!-- Left arm - batting position -->
+            <line x1="60" y1="85" x2="30" y2="130" class="skel-line pulse"/>
+            <line x1="30" y1="130" x2="14" y2="175" class="skel-line pulse"/>
+            <!-- Right arm -->
+            <line x1="140" y1="85" x2="166" y2="115" class="skel-line pulse"/>
+            <line x1="166" y1="115" x2="180" y2="152" class="skel-line pulse"/>
+            <!-- Hips -->
+            <line x1="75" y1="130" x2="125" y2="130" class="skel-line pulse"/>
+            <!-- Legs -->
+            <line x1="75" y1="130" x2="68" y2="220" class="skel-line pulse"/>
+            <line x1="68" y1="220" x2="62" y2="310" class="skel-line pulse"/>
+            <line x1="125" y1="130" x2="132" y2="220" class="skel-line pulse"/>
+            <line x1="132" y1="220" x2="138" y2="310" class="skel-line pulse"/>
+            <!-- Elbow angle arc -->
+            <path d="M 20 120 A 25 25 0 0 1 42 100" class="skel-angle pulse"/>
+            <!-- Key joints -->
+            <circle cx="100" cy="55" r="5" class="skel-node pulse"/>
+            <circle cx="60" cy="85" r="4" class="skel-node pulse"/>
+            <circle cx="140" cy="85" r="4" class="skel-node pulse"/>
+            <circle cx="30" cy="130" r="5" fill="rgba(0,245,196,.95)" class="pulse"/>
+            <circle cx="166" cy="115" r="4" class="skel-node pulse"/>
+            <circle cx="14" cy="175" r="4" class="skel-node pulse"/>
+            <circle cx="180" cy="152" r="4" class="skel-node pulse"/>
+            <circle cx="75" cy="130" r="4" class="skel-node pulse"/>
+            <circle cx="125" cy="130" r="4" class="skel-node pulse"/>
+            <circle cx="68" cy="220" r="4" class="skel-node pulse"/>
+            <circle cx="132" cy="220" r="4" class="skel-node pulse"/>
+            <circle cx="62" cy="310" r="4" class="skel-node pulse"/>
+            <circle cx="138" cy="310" r="4" class="skel-node pulse"/>
+            <!-- Angle label -->
+            <rect x="2" y="96" width="32" height="14" rx="3" fill="rgba(10,21,36,.85)"/>
+            <text x="18" y="107" text-anchor="middle" font-size="9" font-family="system-ui" font-weight="700" fill="#00c9a0">112°</text>
+          </svg>
+        </div>
+        <!-- Floating chips -->
+        <div class="metric-chip mc-good" style="top:10px;left:10px"><span class="mc-icon">✓</span><span class="mc-label">Elbow</span><span class="mc-val g">112°</span></div>
+        <div class="metric-chip mc-warn" style="top:10px;right:10px"><span class="mc-icon">⚠</span><span class="mc-label">Shoulder</span><span class="mc-val w">Opening</span></div>
+        <div class="metric-chip mc-good" style="bottom:10px;left:10px"><span class="mc-icon">✓</span><span class="mc-label">Stance</span><span class="mc-val g">Ideal</span></div>
+        <div class="metric-chip mc-bad" style="bottom:10px;right:10px"><span class="mc-icon">✗</span><span class="mc-label">Head</span><span class="mc-val b">Drifting</span></div>
       </div>
-      <div class="hc-bars">
-        <div class="hc-bar-r"><span class="hc-bar-l">Front elbow</span><div class="hc-bar-t"><div class="hc-bar-f f-good" style="width:88%"></div></div></div>
-        <div class="hc-bar-r"><span class="hc-bar-l">Stance width</span><div class="hc-bar-t"><div class="hc-bar-f f-good" style="width:91%"></div></div></div>
-        <div class="hc-bar-r"><span class="hc-bar-l">Shoulder align</span><div class="hc-bar-t"><div class="hc-bar-f f-warn" style="width:52%"></div></div></div>
-        <div class="hc-bar-r"><span class="hc-bar-l">Head position</span><div class="hc-bar-t"><div class="hc-bar-f f-bad" style="width:30%"></div></div></div>
-      </div>
-      <div class="hc-drill">
-        <div class="hc-drill-label">⚡ Recommended drill</div>
-        <div class="hc-drill-text">Shadow batting in a mirror — keep front shoulder closed until contact</div>
+      <div class="pm-metrics">
+        <div class="pm-m"><div class="pm-m-lbl">Score</div><div class="pm-m-val">74</div><div class="pm-m-st pm-m-w">Developing</div></div>
+        <div class="pm-m"><div class="pm-m-lbl">Elbow</div><div class="pm-m-val" style="font-size:14px">112°</div><div class="pm-m-st pm-m-g">✓ Ideal</div></div>
+        <div class="pm-m"><div class="pm-m-lbl">Shoulder</div><div class="pm-m-val" style="font-size:10px;margin-top:3px">Opening</div><div class="pm-m-st pm-m-w">⚠ Adjust</div></div>
+        <div class="pm-m"><div class="pm-m-lbl">Drill</div><div class="pm-m-val" style="font-size:9px;margin-top:3px;line-height:1.3">Front<br>shoulder lock</div></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- MARQUEE -->
-<div class="marquee-strip">
-  <div class="marquee-inner">
-    <div class="m-item"><span class="m-dot"></span>Batting Analysis</div>
-    <div class="m-item"><span class="m-dot"></span>Bowling Action</div>
-    <div class="m-item"><span class="m-dot"></span>Real-Time Skeleton Tracking</div>
-    <div class="m-item"><span class="m-dot"></span>Joint Angle Measurements</div>
-    <div class="m-item"><span class="m-dot"></span>100% Private — No Uploads</div>
-    <div class="m-item"><span class="m-dot"></span>Downloadable Reports</div>
-    <div class="m-item"><span class="m-dot"></span>Drill Recommendations</div>
-    <div class="m-item"><span class="m-dot"></span>ICC Legal Action Check</div>
-    <div class="m-item"><span class="m-dot"></span>Batting Analysis</div>
-    <div class="m-item"><span class="m-dot"></span>Bowling Action</div>
-    <div class="m-item"><span class="m-dot"></span>Real-Time Skeleton Tracking</div>
-    <div class="m-item"><span class="m-dot"></span>Joint Angle Measurements</div>
-    <div class="m-item"><span class="m-dot"></span>100% Private — No Uploads</div>
-    <div class="m-item"><span class="m-dot"></span>Downloadable Reports</div>
-    <div class="m-item"><span class="m-dot"></span>Drill Recommendations</div>
-    <div class="m-item"><span class="m-dot"></span>ICC Legal Action Check</div>
+<div class="marquee">
+  <div class="marquee-track">
+    <div class="mi"><span class="mi-dot"></span>Live Skeleton Tracking</div>
+    <div class="mi"><span class="mi-dot"></span>Kinogram Analysis</div>
+    <div class="mi"><span class="mi-dot"></span>Color-Coded Joints</div>
+    <div class="mi"><span class="mi-dot"></span>Batting & Bowling</div>
+    <div class="mi"><span class="mi-dot"></span>Drill Recommendations</div>
+    <div class="mi"><span class="mi-dot"></span>100% On-Device</div>
+    <div class="mi"><span class="mi-dot"></span>Slow Motion Controls</div>
+    <div class="mi"><span class="mi-dot"></span>Snapshot Export</div>
+    <div class="mi"><span class="mi-dot"></span>Session History</div>
+    <div class="mi"><span class="mi-dot"></span>Annotation Tools</div>
+    <div class="mi"><span class="mi-dot"></span>ICC Action Check</div>
+    <div class="mi"><span class="mi-dot"></span>Live Angle Graph</div>
+    <!-- duplicate -->
+    <div class="mi"><span class="mi-dot"></span>Live Skeleton Tracking</div>
+    <div class="mi"><span class="mi-dot"></span>Kinogram Analysis</div>
+    <div class="mi"><span class="mi-dot"></span>Color-Coded Joints</div>
+    <div class="mi"><span class="mi-dot"></span>Batting & Bowling</div>
+    <div class="mi"><span class="mi-dot"></span>Drill Recommendations</div>
+    <div class="mi"><span class="mi-dot"></span>100% On-Device</div>
+    <div class="mi"><span class="mi-dot"></span>Slow Motion Controls</div>
+    <div class="mi"><span class="mi-dot"></span>Snapshot Export</div>
+    <div class="mi"><span class="mi-dot"></span>Session History</div>
+    <div class="mi"><span class="mi-dot"></span>Annotation Tools</div>
+    <div class="mi"><span class="mi-dot"></span>ICC Action Check</div>
+    <div class="mi"><span class="mi-dot"></span>Live Angle Graph</div>
   </div>
 </div>
 
 <!-- FEATURES -->
-<section class="section features-bg" id="features">
-  <div class="s-center fade-up">
-    <span class="s-tag">Why PitchIQ</span>
-    <h2>Everything a Level 3 coach<br>gives you. <em>On demand.</em></h2>
-    <p class="s-p">Professional coaching analysis used to mean appointments, travel, and hundreds of dollars. PitchIQ delivers it the moment you upload a video.</p>
+<section class="section feat-bg" id="features">
+  <div class="sc fu">
+    <span class="stag">Why PitchIQ</span>
+    <h2>Built like a <em>pro system.</em><br>Priced like nothing.</h2>
+    <p class="sp">Every feature was designed around what professional cricket analysts actually use — then made accessible to any player with a smartphone.</p>
   </div>
   <div class="bento">
-    <div class="bento-card bc-1 fade-up">
-      <div class="bc-icon">🎯</div>
-      <div class="bc-title">Cricket-specific AI — not generic fitness tracking</div>
-      <div class="bc-body">Our feedback engine is built entirely around <strong>cricket biomechanics</strong>. Front elbow angle, shoulder rotation, stance width, body lean at delivery, front arm height, head position at contact. Every metric maps directly to a coaching cue used by qualified Level 2 and Level 3 coaches. You get the same analysis — with a drill to fix every issue.</div>
-      <div class="analysis-preview">
-        <div class="ap-row"><span class="ap-label">Front elbow angle</span><span class="ap-val good">112° — ideal range ✓</span></div>
-        <div class="ap-row"><span class="ap-label">Shoulder alignment</span><span class="ap-val warn">Opening early — adjust</span></div>
-        <div class="ap-row"><span class="ap-label">Head position</span><span class="ap-val bad">Drifting off line — drill ↗</span></div>
-        <div class="ap-row"><span class="ap-label">Stance width</span><span class="ap-val good">Shoulder-width — solid ✓</span></div>
+    <div class="bc bc-1 fu">
+      <div class="bc-ico">🎯</div>
+      <div class="bc-t">Color-coded live skeleton — know your risk zones instantly</div>
+      <div class="bc-b">As your video plays, every joint is tracked and <strong>color-coded in real time</strong>: green means your angle is in the coaching-ideal range, amber means an adjustment is needed, red flags a critical issue. You see your own biomechanical risk map, frame by frame.</div>
+      <div class="bc-preview">
+        <div class="skel-preview-row"><span class="spr-label">Front elbow angle</span><div class="spr-bar"><div class="spr-fill fill-g" style="width:88%"></div></div><span class="spr-val val-g">112°</span></div>
+        <div class="skel-preview-row"><span class="spr-label">Shoulder alignment</span><div class="spr-bar"><div class="spr-fill fill-w" style="width:52%"></div></div><span class="spr-val val-w">Open</span></div>
+        <div class="skel-preview-row"><span class="spr-label">Stance width</span><div class="spr-bar"><div class="spr-fill fill-g" style="width:92%"></div></div><span class="spr-val val-g">Good</span></div>
+        <div class="skel-preview-row"><span class="spr-label">Head position</span><div class="spr-bar"><div class="spr-fill fill-b" style="width:28%"></div></div><span class="spr-val val-b">Drift</span></div>
       </div>
     </div>
-    <div class="bento-card bc-2 fade-up d1">
-      <div class="bc-icon">🔒</div>
-      <div class="bc-title">Zero uploads. Absolute privacy.</div>
-      <div class="bc-body">Your video is analyzed <strong>entirely on your own device</strong> — inside your browser. Nothing is ever transmitted to a server. Turn off your Wi-Fi after the page loads and every analysis still works perfectly. Your training is private.</div>
-      <div class="privacy-vis">
-        <div class="pv-row"><div class="pv-icon">✓</div>Video never leaves your device</div>
-        <div class="pv-row"><div class="pv-icon">✓</div>No account required</div>
-        <div class="pv-row"><div class="pv-icon">✓</div>Works offline once loaded</div>
-        <div class="pv-row"><div class="pv-icon">✓</div>Zero data collected</div>
+    <div class="bc bc-2 fu d1">
+      <div class="bc-ico">📸</div>
+      <div class="bc-t">Kinogram mode — see your entire motion arc in one image</div>
+      <div class="bc-b">One of the most powerful tools in professional cricket analysis — now built into PitchIQ. <strong>Kinogram captures multiple skeleton poses across your delivery or stroke and composites them into a single image</strong>, showing the full motion arc at once. Coaches use this to spot inefficiencies invisible in normal video.</div>
+    </div>
+    <div class="bc bc-3 fu">
+      <div class="bc-ico">👻</div>
+      <div class="bc-t">Skeleton-only mode</div>
+      <div class="bc-b">Strip the video away. <strong>Pure skeleton on a dark background</strong> — no distractions. See exactly how your body is moving without visual noise. The view professional biomechanists use.</div>
+    </div>
+    <div class="bc bc-4 fu d1">
+      <div class="bc-ico">📈</div>
+      <div class="bc-t">Live angle graph</div>
+      <div class="bc-b">A real-time line chart plots your elbow and shoulder angle as the video plays. <strong>Watch exactly when your technique breaks down</strong> — the frame where the angle goes amber or red is the frame to fix.</div>
+    </div>
+    <div class="bc bc-5 fu d2">
+      <div class="bc-ico">🔒</div>
+      <div class="bc-t">100% private · zero uploads</div>
+      <div class="bc-b">Every analysis runs inside your browser. <strong>Nothing is ever transmitted.</strong> Disconnect Wi-Fi — it still works. Your footage stays on your device, period.</div>
+      <div class="bc-preview" style="margin-top:14px">
+        <div class="priv-row"><div class="priv-ico">✓</div>Video never leaves your device</div>
+        <div class="priv-row"><div class="priv-ico">✓</div>No account required to start</div>
+        <div class="priv-row"><div class="priv-ico">✓</div>Works offline once loaded</div>
       </div>
-    </div>
-    <div class="bento-card bc-3 fade-up d2">
-      <div class="bc-icon">⚡</div>
-      <div class="bc-title">Real-time skeleton tracking as you play</div>
-      <div class="bc-body">Hit play and watch the AI map your body in real time — every joint tracked as the video plays. <strong>No frame-by-frame guessing.</strong> Pause at any moment for a deep-dive analysis. Then let it run again. See exactly where your technique changes under different conditions.</div>
-    </div>
-    <div class="bento-card bc-4 fade-up d3">
-      <div class="bc-icon">📋</div>
-      <div class="bc-title">Drills for every issue — not just a score</div>
-      <div class="bc-body">Every flaw PitchIQ identifies comes with a <strong>specific, actionable drill</strong> you can run in a net session tomorrow. Not generic advice — precise exercises targeting the exact biomechanical issue detected. Shadow batting routines, front arm drills, front shoulder cues, head position exercises. The kind of targeted corrective work that separates players who improve from those who plateau.</div>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="section" id="how">
-  <div class="s-center fade-up">
-    <span class="s-tag">The Process</span>
-    <h2>Three steps to <em>real</em> coaching feedback.</h2>
-    <p class="s-p">No setup. No hardware. No scheduling. Just your phone, a video, and our AI doing the technical work.</p>
+<section class="section hiw-bg" id="hiw">
+  <div class="sc fu">
+    <span class="stag">The Process</span>
+    <h2>Feedback in <em>three steps.</em></h2>
+    <p class="sp">No setup. No downloads. No scheduling. Your phone, a video, and our AI doing the work.</p>
   </div>
-  <div class="hiw-row">
-    <div class="hiw-card fade-up d1">
-      <div class="hiw-num">1</div>
-      <div class="hiw-icon">🎬</div>
-      <div class="hiw-t">Film yourself playing</div>
-      <div class="hiw-b">Record batting or bowling on any smartphone. Ask a teammate to film from the side at waist height, 5–10 metres away. Natural outdoor lighting works perfectly. No tripod, no studio, no equipment.</div>
-    </div>
-    <div class="hiw-card fade-up d2">
-      <div class="hiw-num">2</div>
-      <div class="hiw-icon">🧠</div>
-      <div class="hiw-t">Watch the AI map your body live</div>
-      <div class="hiw-b">Upload your video and hit play. The AI tracks every joint in real time — 30 frames per second. Pause at any key moment and run a full deep-dive analysis. See your skeleton overlay as you move.</div>
-    </div>
-    <div class="hiw-card fade-up d3">
-      <div class="hiw-num">3</div>
-      <div class="hiw-icon">📊</div>
-      <div class="hiw-t">Get feedback and drills</div>
-      <div class="hiw-b">Receive coaching-level feedback on every major biomechanic: what's right, what needs work, exactly why it matters, and the specific drill to fix it. Download a full report and take it to training.</div>
-    </div>
+  <div class="hiw-grid">
+    <div class="hiw-card fu d1"><div class="hiw-n">1</div><div class="hiw-ico">🎬</div><div class="hiw-t">Film yourself playing</div><div class="hiw-b">Any smartphone. Side-on at waist height, 5–10m away. Ask a teammate, lean it against a bag. Good outdoor lighting. Full body in frame. That's it.</div></div>
+    <div class="hiw-card fu d2"><div class="hiw-n">2</div><div class="hiw-ico">🧠</div><div class="hiw-t">Watch AI track you live</div><div class="hiw-b">Upload and hit play. The skeleton overlay appears in real time, tracking 33 body landmarks frame by frame. Color-coded joints show your technique as you move. Pause at any key moment.</div></div>
+    <div class="hiw-card fu d3"><div class="hiw-n">3</div><div class="hiw-ico">📋</div><div class="hiw-t">Get feedback and drills</div><div class="hiw-b">Click Analyze for a full deep-dive report. Coaching-language feedback on every major biomechanic. A specific drill for every issue. Download and bring it to training tomorrow.</div></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section stats-section">
+  <div class="sc fu"><span class="stag">The Gap We're Closing</span><h2>Cricket's inequality<br><em>is real.</em></h2></div>
+  <div class="stats-grid fu">
+    <div class="sg"><div class="sg-n"><span class="counter" data-target="300">0</span><sup>M+</sup></div><div class="sg-l">Cricketers worldwide with zero access to professional technique analysis</div></div>
+    <div class="sg"><div class="sg-n">$<span class="counter" data-target="150">0</span><sup>+</sup></div><div class="sg-l">Cost of a single session with a professional biomechanics coach</div></div>
+    <div class="sg"><div class="sg-n"><span class="counter" data-target="2">0</span><sup>nd</sup></div><div class="sg-l">Most-watched sport on Earth — but invisible in the sports-tech revolution</div></div>
+    <div class="sg"><div class="sg-n">$<span class="counter" data-target="5">0</span></div><div class="sg-l">Cost of unlimited PitchIQ premium — per month</div></div>
   </div>
 </section>
 
 <!-- COMPARISON -->
 <section class="section comp-bg" id="compare">
-  <div class="s-center comp-intro fade-up">
-    <span class="s-tag">Honest Comparison</span>
-    <h2>PitchIQ vs <em>the alternatives</em></h2>
-    <p class="s-p">Here's exactly where PitchIQ stands against every other option available to a cricketer today.</p>
+  <div class="sc fu">
+    <span class="stag">Honest Comparison</span>
+    <h2>PitchIQ vs <em>everything else.</em></h2>
+    <p class="sp">We looked at every alternative a cricketer might use. Here's exactly how we stack up.</p>
   </div>
-  <div class="comp-wrap fade-up">
+  <div class="comp-wrap fu">
     <div class="comp-tabs">
-      <button class="comp-tab active" onclick="switchTab(0)">vs Human Coach</button>
-      <button class="comp-tab" onclick="switchTab(1)">vs Video Analysis Apps</button>
-      <button class="comp-tab" onclick="switchTab(2)">vs Pro Systems (Hawk-Eye)</button>
-      <button class="comp-tab" onclick="switchTab(3)">vs YouTube / Self-Study</button>
+      <button class="ctab on" onclick="switchTab(0)">vs Human Coach</button>
+      <button class="ctab" onclick="switchTab(1)">vs Video Apps</button>
+      <button class="ctab" onclick="switchTab(2)">vs Hawk-Eye / Pro Systems</button>
+      <button class="ctab" onclick="switchTab(3)">vs YouTube</button>
     </div>
-
-    <!-- vs Human Coach -->
-    <div class="comp-panel active">
-      <div class="comp-pitchiq">
-        <div class="comp-product-name">PitchIQ</div>
-        <div class="comp-h">Instant, objective, always available</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Feedback within seconds of upload</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Free tier — $0 forever</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Available 24/7, no scheduling</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Objective measurements — no opinion bias</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Drill recommendations included</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Downloadable report every session</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-par">~</div><div class="comp-row-text">Nuanced situational understanding (use both)</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">✓ Best for: self-directed improvement and objective tracking</div></div>
-      </div>
-      <div class="comp-other">
-        <div class="comp-product-name">Human Coach</div>
-        <div class="comp-h">High expertise, but high cost and limited access</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">$60–$150+ per session</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Requires scheduling and travel</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Subjective — varies by coach quality</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Deep situational cricket knowledge</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-par">~</div><div class="comp-row-text muted">No written report in most sessions</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Not accessible for most grassroots players</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">Best used alongside PitchIQ, not instead of it</div></div>
-      </div>
+    <!-- Tab 0 -->
+    <div class="cpanel on">
+      <div class="cp-pitchiq"><div class="cp-brand">PitchIQ</div><div class="cp-h">Instant, objective, always available</div><div class="cp-rows"><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Feedback in seconds — no scheduling</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Free to start — $5/mo for unlimited</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Objective joint angle measurements — no bias</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Drills for every detected issue</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Written report you can keep and share</div></div><div class="cp-row"><div class="cp-icon icon-p">~</div><div class="cp-txt">Situational cricket IQ (use both together)</div></div></div><div class="cp-foot"><div class="cp-verdict">✓ Best for: objective tracking between sessions</div></div></div>
+      <div class="cp-other"><div class="cp-brand">Human Coach</div><div class="cp-h">High expertise, high cost, limited availability</div><div class="cp-rows"><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">$60–$150+ per hour</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Requires scheduling, travel, availability</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Subjective — quality varies widely</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Deep cricket situational knowledge</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Usually no written report</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Inaccessible for most grassroots players</div></div></div><div class="cp-foot"><div class="cp-verdict">Best used alongside PitchIQ — not instead</div></div></div>
     </div>
-
-    <!-- vs Video Analysis Apps -->
-    <div class="comp-panel">
-      <div class="comp-pitchiq">
-        <div class="comp-product-name">PitchIQ</div>
-        <div class="comp-h">Cricket-specific AI — not generic sport</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Built specifically around cricket biomechanics</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Automatic AI analysis — no manual annotation</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Free tier includes full analysis</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Real-time skeleton tracking while video plays</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Drill recommendations for every flaw found</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">No app download — runs in any browser</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">✓ Most accessible cricket-specific analysis tool</div></div>
-      </div>
-      <div class="comp-other">
-        <div class="comp-product-name">Generic Video Analysis Apps</div>
-        <div class="comp-h">Useful for drawing lines — not for coaching cues</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">You draw the lines — no AI analysis</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">No cricket-specific feedback engine</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-par">~</div><div class="comp-row-text muted">Typically $10–$20/month for full features</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">No drill recommendations</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Side-by-side video comparison</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Requires you to know what to look for</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">Good tool, but requires coaching knowledge to use effectively</div></div>
-      </div>
+    <!-- Tab 1 -->
+    <div class="cpanel">
+      <div class="cp-pitchiq"><div class="cp-brand">PitchIQ</div><div class="cp-h">Automatic cricket-specific AI — no manual work</div><div class="cp-rows"><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Fully automatic AI analysis — no drawing required</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Cricket-specific feedback engine, not generic sport</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Free tier includes full analysis + drills</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Kinogram analysis built in</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">No download — runs in any browser</div></div></div><div class="cp-foot"><div class="cp-verdict">✓ The only zero-effort cricket analysis tool</div></div></div>
+      <div class="cp-other"><div class="cp-brand">Generic Video Analysis Apps</div><div class="cp-h">You do the work — they just show the video</div><div class="cp-rows"><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">You draw angles manually — no automation</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">No cricket-specific feedback</div></div><div class="cp-row"><div class="cp-icon icon-p">~</div><div class="cp-txt mu">$10–$20/month for full features</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">No drill recommendations</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Side-by-side comparison</div></div></div><div class="cp-foot"><div class="cp-verdict">Useful only if you already know what to look for</div></div></div>
     </div>
-
-    <!-- vs Hawk-Eye -->
-    <div class="comp-panel">
-      <div class="comp-pitchiq">
-        <div class="comp-product-name">PitchIQ</div>
-        <div class="comp-h">Same goal. Accessible to every player.</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Available to any player with a smartphone</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Free — no franchise budget required</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Works instantly, anywhere</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Real feedback with corrective drills</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Private — your footage stays on your device</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-par">~</div><div class="comp-row-text">Camera hardware is a phone, not ultra-HD rigs</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">✓ Democratises what was previously only for franchises</div></div>
-      </div>
-      <div class="comp-other">
-        <div class="comp-product-name">Hawk-Eye / Pro Systems</div>
-        <div class="comp-h">Elite accuracy — for elite budgets only</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">$50,000–$500,000+ annual licensing</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Exclusive to IPL/international franchises</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Requires dedicated hardware installation</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">No consumer access exists</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Extremely high precision multi-camera tracking</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">The gold standard — but inaccessible to 99.9% of cricketers</div></div>
-      </div>
+    <!-- Tab 2 -->
+    <div class="cpanel">
+      <div class="cp-pitchiq"><div class="cp-brand">PitchIQ</div><div class="cp-h">Same goal. Available to every player.</div><div class="cp-rows"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Works on any smartphone — zero hardware needed</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Free tier. $5/mo premium. Zero entry barrier.</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Cricket-specific coaching cues + drills</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Completely private — runs on your device</div></div><div class="cp-foot"><div class="cp-verdict">✓ Democratises what was only for franchises</div></div></div>
+      <div class="cp-other"><div class="cp-brand">Hawk-Eye / Pro Systems</div><div class="cp-h">Elite accuracy — for elite budgets</div><div class="cp-rows"><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">$50,000–$500,000+ annual contracts</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Exclusive to IPL / international franchises</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Requires hardware installation</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">No consumer access exists</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Extremely high precision</div></div></div><div class="cp-foot"><div class="cp-verdict">Gold standard — inaccessible to 99.9% of cricketers</div></div></div>
     </div>
-
-    <!-- vs YouTube -->
-    <div class="comp-panel">
-      <div class="comp-pitchiq">
-        <div class="comp-product-name">PitchIQ</div>
-        <div class="comp-h">Feedback on your technique. Not someone else's.</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Personalized to your actual footage</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Identifies your specific flaws — not generic ones</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Recommends drills for your exact issues</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Objective — measurement, not opinion</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Tracks your progress over time</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">✓ The only option that analyzes you specifically</div></div>
-      </div>
-      <div class="comp-other">
-        <div class="comp-product-name">YouTube / Self-Study</div>
-        <div class="comp-h">Great for learning theory — not for knowing your flaws</div>
-        <div class="comp-rows">
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Generic advice — not personalized to you</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">Can't tell you what your specific flaws are</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-no">✗</div><div class="comp-row-text muted">You don't know what to look for</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Huge library of technique content</div></div>
-          <div class="comp-row"><div class="comp-row-icon icon-yes">✓</div><div class="comp-row-text">Free</div></div>
-        </div>
-        <div class="comp-bottom"><div class="comp-verdict">Complement with PitchIQ: YouTube to learn, PitchIQ to check</div></div>
-      </div>
+    <!-- Tab 3 -->
+    <div class="cpanel">
+      <div class="cp-pitchiq"><div class="cp-brand">PitchIQ</div><div class="cp-h">Analysis of you — not someone else</div><div class="cp-rows"><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Analyzes your actual footage and your specific flaws</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Objective measurements — not opinions</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Specific drills for your exact issues</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Tracks progress week over week</div></div></div><div class="cp-foot"><div class="cp-verdict">✓ The only tool that analyzes you specifically</div></div></div>
+      <div class="cp-other"><div class="cp-brand">YouTube / Self-Study</div><div class="cp-h">Great for theory — useless for your flaws</div><div class="cp-rows"><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Generic advice — not about you</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">Can't tell you what your flaws are</div></div><div class="cp-row"><div class="cp-icon icon-n">✗</div><div class="cp-txt mu">You don't know what to look for</div></div><div class="cp-row"><div class="cp-icon icon-y">✓</div><div class="cp-txt">Huge library, free forever</div></div></div><div class="cp-foot"><div class="cp-verdict">Complement PitchIQ with YouTube — not replace it</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
 <section class="section testi-bg" id="testimonials">
-  <div class="s-center fade-up">
-    <span class="s-tag">From the Crease</span>
-    <h2>What players are <em>saying.</em></h2>
-  </div>
+  <div class="sc fu"><span class="stag">From the Crease</span><h2>What players <em>say.</em></h2></div>
   <div class="testi-grid">
-    <div class="testi-card fade-up d1">
-      <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <div class="testi-q">"Six years of bowling and nobody had ever told me my front arm was this low. PitchIQ flagged it in thirty seconds. My coach confirmed it the next session and couldn't believe I hadn't been told before."</div>
-      <div class="testi-author">
-        <div class="testi-av">RK</div>
-        <div><div class="testi-name">Rahul K.</div><div class="testi-role">Fast bowler · Houston CC</div></div>
-      </div>
-    </div>
-    <div class="testi-card fade-up d2">
-      <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <div class="testi-q">"I used this before county trials. It caught that I was opening my shoulders way too early. Two weeks drilling it in the nets and I made the squad. I don't know if I would have without this."</div>
-      <div class="testi-author">
-        <div class="testi-av">JT</div>
-        <div><div class="testi-name">James T.</div><div class="testi-role">Opening bat · Middlesex U19</div></div>
-      </div>
-    </div>
-    <div class="testi-card fade-up d3">
-      <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <div class="testi-q">"As a coach, I use PitchIQ as a second opinion during sessions. The drill recommendations alone are worth it — it gives my players something concrete to work on between sessions."</div>
-      <div class="testi-author">
-        <div class="testi-av">AP</div>
-        <div><div class="testi-name">Arjun P.</div><div class="testi-role">Level 2 Coach · Bay Area Cricket</div></div>
-      </div>
-    </div>
+    <div class="tc fu d1"><div class="tc-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><div class="tc-q">"Six years of bowling and no one had ever told me my front arm was this low. PitchIQ flagged it in thirty seconds. My coach confirmed it the next session and couldn't believe I hadn't been told before."</div><div class="tc-a"><div class="tc-av">RK</div><div><div class="tc-name">Rahul K.</div><div class="tc-role">Fast bowler · Houston CC</div></div></div></div>
+    <div class="tc fu d2"><div class="tc-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><div class="tc-q">"I used this before county trials. It caught that I was opening my shoulders way too early. Two weeks drilling it and I made the squad. I don't know if I would have without this."</div><div class="tc-a"><div class="tc-av">JT</div><div><div class="tc-name">James T.</div><div class="tc-role">Opening bat · Middlesex U19</div></div></div></div>
+    <div class="tc fu d3"><div class="tc-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><div class="tc-q">"As a Level 2 coach I use PitchIQ as a second opinion. The kinogram mode alone is worth it — showing a bowler their full delivery arc in one image is impossible to argue with."</div><div class="tc-a"><div class="tc-av">AP</div><div><div class="tc-name">Arjun P.</div><div class="tc-role">Level 2 Coach · Bay Area Cricket</div></div></div></div>
   </div>
 </section>
 
 <!-- PRICING -->
 <section class="section pricing-bg" id="pricing">
-  <div class="s-center fade-up">
-    <span class="s-tag">Plans</span>
-    <h2>Start free. <em>Upgrade when ready.</em></h2>
-    <p class="s-p">No credit card needed. The free plan is genuinely useful — premium is for players serious about tracking every session.</p>
-  </div>
-  <div class="pricing-grid fade-up">
-    <div class="price-card">
-      <div class="plan-badge">Free</div>
-      <div class="price-amount"><span class="price-dollar">$</span><span class="price-num">0</span></div>
+  <div class="sc fu"><span class="stag">Plans</span><h2>Start free.<br><em>Upgrade when ready.</em></h2><p class="sp">No credit card needed. The free plan is genuinely useful. Premium is for players serious about tracking every session.</p></div>
+  <div class="pricing-grid fu">
+    <div class="pc">
+      <div class="plan-name">Free</div>
+      <div class="price-row"><span class="price-sym">$</span><span class="price-amt">0</span></div>
       <div class="price-per">Forever free</div>
-      <div class="plan-desc">Everything you need to discover how PitchIQ works and start improving. 3 full analyses per day — resets at midnight.</div>
-      <button class="plan-cta plan-cta-free" onclick="window.location='app.html'">Get Started Free →</button>
-      <div class="plan-feats">
-        <div class="pf"><span class="pf-icon">✓</span><span class="pf-t">3 deep analyses per day</span></div>
-        <div class="pf"><span class="pf-icon">✓</span><span class="pf-t">Real-time skeleton tracking</span></div>
-        <div class="pf"><span class="pf-icon">✓</span><span class="pf-t">Batting + bowling modes</span></div>
-        <div class="pf"><span class="pf-icon">✓</span><span class="pf-t">Full joint angle measurements</span></div>
-        <div class="pf"><span class="pf-icon">✓</span><span class="pf-t">Drill recommendations</span></div>
-        <div class="pf"><span class="pf-icon">✓</span><span class="pf-t">Downloadable coaching report</span></div>
-        <div class="pf"><span class="pf-icon">✓</span><span class="pf-t">100% private — no upload</span></div>
-        <div class="pf-div"></div>
-        <div class="pf pf-muted"><span class="pf-icon">—</span><span class="pf-t">Daily analysis limit</span></div>
+      <div class="plan-desc">Everything you need to start improving. 3 deep analyses per day — resets at midnight.</div>
+      <button class="plan-btn pb-free" onclick="location.href='app.html'">Get Started Free →</button>
+      <div class="pfeats">
+        <div class="pf"><span class="pf-i">✓</span><span class="pf-t">3 deep analyses per day</span></div>
+        <div class="pf"><span class="pf-i">✓</span><span class="pf-t">Live skeleton tracking (unlimited)</span></div>
+        <div class="pf"><span class="pf-i">✓</span><span class="pf-t">Kinogram mode</span></div>
+        <div class="pf"><span class="pf-i">✓</span><span class="pf-t">Color-coded risk joints</span></div>
+        <div class="pf"><span class="pf-i">✓</span><span class="pf-t">Drill recommendations</span></div>
+        <div class="pf"><span class="pf-i">✓</span><span class="pf-t">Downloadable report</span></div>
+        <div class="pf"><span class="pf-i">✓</span><span class="pf-t">100% private — no uploads</span></div>
+        <div class="pdiv"></div>
+        <div class="pf pf-mu"><span class="pf-i">—</span><span class="pf-t">Daily analysis cap</span></div>
       </div>
     </div>
-    <div class="price-card featured">
-      <div class="featured-label">Most Popular</div>
-      <div class="plan-badge">Premium</div>
-      <div class="price-amount"><span class="price-dollar" style="color:var(--teal)">$</span><span class="price-num">5</span></div>
+    <div class="pc feat">
+      <div class="feat-badge">Most Popular</div>
+      <div class="plan-name">Premium</div>
+      <div class="price-row"><span class="price-sym" style="color:var(--teal)">$</span><span class="price-amt">5</span></div>
       <div class="price-per">per month · cancel anytime</div>
-      <div class="plan-desc">For players training seriously. Unlimited analyses means every net session, every over, every technical change tracked and measured.</div>
-      <button class="plan-cta plan-cta-paid" onclick="window.location='app.html?upgrade=1'">Unlock Premium →</button>
-      <div class="plan-feats">
-        <div class="pf"><span class="pf-icon" style="color:var(--teal)">✓</span><span class="pf-t">Unlimited AI analyses</span></div>
-        <div class="pf"><span class="pf-icon" style="color:var(--teal)">✓</span><span class="pf-t">Everything in Free</span></div>
-        <div class="pf"><span class="pf-icon" style="color:var(--teal)">✓</span><span class="pf-t">Advanced coaching cues</span></div>
-        <div class="pf"><span class="pf-icon" style="color:var(--teal)">✓</span><span class="pf-t">Progress tracking across sessions</span></div>
-        <div class="pf"><span class="pf-icon" style="color:var(--teal)">✓</span><span class="pf-t">Priority support</span></div>
-        <div class="pf-div"></div>
-        <div class="pf"><span class="pf-icon" style="color:var(--teal)">✓</span><span class="pf-t" style="font-weight:500">No daily limit — ever</span></div>
-        <div class="pf"><span class="pf-icon" style="color:var(--teal)">✓</span><span class="pf-t">Less than one coaching session</span></div>
+      <div class="plan-desc">For players training seriously. Every net session, every over, every technical change tracked with no limits.</div>
+      <button class="plan-btn pb-paid" onclick="location.href='app.html?upgrade=1'">Unlock Premium →</button>
+      <div class="pfeats">
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t">Unlimited deep analyses</span></div>
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t">Everything in Free</span></div>
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t">Session history (last 10)</span></div>
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t">Advanced coaching cues</span></div>
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t">Snapshot PNG export</span></div>
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t">Priority support</span></div>
+        <div class="pdiv"></div>
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t" style="font-weight:600">No limit — ever</span></div>
+        <div class="pf"><span class="pf-i" style="color:var(--teal)">✓</span><span class="pf-t">Less than one coaching session</span></div>
       </div>
     </div>
   </div>
-  <p class="fade-up" style="text-align:center;font-size:12px;color:var(--muted2);margin-top:20px">No credit card for free plan · Secure checkout · Cancel any time, no questions</p>
+  <p class="fu" style="text-align:center;font-size:12px;color:var(--mu2);margin-top:20px">No credit card for free · Secure checkout · Cancel any time, no questions asked</p>
 </section>
 
 <!-- FAQ -->
-<section class="section" id="faq" style="background:var(--bg2)">
-  <div class="s-center fade-up">
-    <span class="s-tag">Questions</span>
-    <h2>Everything you need <em>to know.</em></h2>
-  </div>
-  <div class="faq-wrap fade-up">
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is my video private? How does on-device processing work?<span class="faq-chevron">▾</span></button><div class="faq-a">Your video is analyzed entirely within your browser — it's processed by your own device's CPU and GPU, never transmitted over the internet. You can verify this yourself: load the page, then disconnect your Wi-Fi entirely. The analysis still runs. <strong>Nothing about your footage ever reaches our servers.</strong> We don't have servers for video analysis — by design.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What kind of video works best?<span class="faq-chevron">▾</span></button><div class="faq-a">Side-on angle works best — camera at waist height, 5–10 metres away. Most smartphone cameras are perfectly sufficient. <strong>Good lighting is the biggest factor:</strong> natural outdoor light (even overcast) is ideal. Wear fitted clothing that contrasts with the background — a blue shirt against a green outfield is easy to detect; loose whites against a white sightscreen is harder. Frame yourself fully in the shot with some space above your head and below your feet.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How does the real-time tracking work?<span class="faq-chevron">▾</span></button><div class="faq-a">When you hit play, our AI processes each frame of your video as it plays and draws a skeleton overlay on top of the footage in real time. You can watch your joints being tracked at 25–30 frames per second. When you see a moment you want deeply analyzed — bat-ball contact, front foot landing — simply pause the video and click Analyze. The AI then runs a detailed biomechanical assessment on that specific frame.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What does "3 analyses per day" mean exactly?<span class="faq-chevron">▾</span></button><div class="faq-a">The real-time skeleton tracking is <strong>always unlimited</strong> — you can watch your skeleton overlay play through any video as many times as you want. "Analyses" refers to the detailed deep-dive reports: joint angle measurements, coaching feedback, and drill recommendations. Free users can generate 3 of these per day. The counter resets automatically at midnight every night. Premium removes this limit entirely.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How accurate is the AI? Should I trust it over a human coach?<span class="faq-chevron">▾</span></button><div class="faq-a">The AI tracking technology we use is the same that powers professional sports analysis platforms worldwide. On good-quality side-on footage in reasonable lighting, joint angle measurements are highly reliable. That said, <strong>PitchIQ is a supplement to coaching, not a replacement for it.</strong> The ideal workflow: use PitchIQ to identify issues between coaching sessions, bring your report to your next session, and let your coach provide the situational and contextual expertise that AI can't replicate. Many coaches now use PitchIQ alongside their sessions for exactly this reason.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I cancel Premium at any time?<span class="faq-chevron">▾</span></button><div class="faq-a">Yes — cancel instantly from your account settings, at any time, with no fees and no retention friction. Your premium access continues until the end of your billing period. We don't make cancellation difficult.</div></div>
+<section class="section faq-bg" id="faq">
+  <div class="sc fu"><span class="stag">Questions</span><h2>Everything you need <em>to know.</em></h2></div>
+  <div class="faq-wrap fu">
+    <div class="fq"><button class="fq-btn" onclick="tfaq(this)">Is my video private? How does the on-device processing work?<span class="fq-chev">▾</span></button><div class="fq-body">Your video is analyzed entirely within your browser using your own device's processing power. <strong>Nothing is ever transmitted to any server.</strong> You can verify this by disconnecting Wi-Fi after the page loads — every analysis still works perfectly. We don't have video analysis servers by design. Your footage is yours.</div></div>
+    <div class="fq"><button class="fq-btn" onclick="tfaq(this)">What is a kinogram and why does it matter?<span class="fq-chev">▾</span></button><div class="fq-body">A kinogram captures <strong>multiple skeleton poses across a movement and composites them into one image</strong>, showing the full motion arc simultaneously. Professional cricket coaches use kinograms to spot inefficiencies invisible in normal video — like a bowler's arm dropping mid-run-up, or weight transfer during a batting stroke. PitchIQ generates kinograms automatically in seconds.</div></div>
+    <div class="fq"><button class="fq-btn" onclick="tfaq(this)">What video setup gives the best results?<span class="fq-chev">▾</span></button><div class="fq-body">Side-on camera angle, waist height, 5–10m away. <strong>Good, even lighting is the single biggest factor</strong> — overcast outdoor is ideal. Wear fitted clothing that contrasts with the background. Blue shirt against a green outfield is easy; loose whites against a white sightscreen is hard. Full body in frame with some space at the top and bottom.</div></div>
+    <div class="fq"><button class="fq-btn" onclick="tfaq(this)">What does "3 analyses per day" include and exclude?<span class="fq-chev">▾</span></button><div class="fq-body"><strong>Live skeleton tracking is always unlimited</strong> — watch the colored skeleton overlay play through your entire video as many times as you want. "Analyses" refers to the deep-dive reports: joint angle measurements, coaching feedback, and drill recommendations. Free users get 3 of these per day; the counter resets at midnight. Premium removes all limits.</div></div>
+    <div class="fq"><button class="fq-btn" onclick="tfaq(this)">How accurate is the AI analysis?<span class="fq-chev">▾</span></button><div class="fq-body">The underlying AI technology we use powers professional sports analysis tools worldwide. On good-quality side-on footage in reasonable lighting, joint angle measurements are highly reliable. <strong>PitchIQ is a supplement to coaching, not a replacement</strong> — it's most powerful when combined with a coach who can provide the situational cricket context that no AI currently captures.</div></div>
+    <div class="fq"><button class="fq-btn" onclick="tfaq(this)">Can I cancel Premium at any time?<span class="fq-chev">▾</span></button><div class="fq-body">Yes — instantly, from account settings, with no fees. Your premium access continues until the end of your billing period. We don't use dark patterns or make cancellation hard.</div></div>
   </div>
 </section>
 
 <!-- FINAL CTA -->
-<section class="final-cta-section">
-  <div class="fade-up">
-    <span class="s-tag" style="justify-content:center">Ready?</span>
+<section class="cta-section">
+  <div class="fu">
+    <span class="stag">Ready?</span>
     <h2>Your first analysis is<br><em>60 seconds away.</em></h2>
-    <p>No account. No credit card. No setup. Just upload a video and watch the AI get to work on your technique.</p>
-    <div class="cta-row">
-      <button class="btn-hero-primary" onclick="window.location='app.html'">Start Analyzing Free →</button>
-      <button class="btn-hero-secondary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">View Pricing</button>
+    <p class="sp">No account. No credit card. No setup. Upload a video and watch the AI analyze your technique in real time.</p>
+    <div class="cta-btns">
+      <button class="btn-hp" onclick="location.href='app.html'">Start Analyzing Free →</button>
+      <button class="btn-hs" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">View Pricing</button>
     </div>
-    <div class="final-note">Free forever tier · <span>100% private — zero uploads</span> · No credit card required</div>
+    <div class="cta-note">Free forever · <span>100% private · zero uploads</span> · No credit card required</div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div class="nav-brand">
-        <div class="nav-mark" style="width:28px;height:28px;font-size:10px">PI</div>
-        <div class="nav-wordmark" style="font-size:15px">Pitch<b>IQ</b></div>
-      </div>
+  <div class="ft">
+    <div class="fa">
+      <div class="nb"><div class="nm">PI</div><div class="nw">Pitch<b>IQ</b></div></div>
       <p>AI-powered cricket technique analysis. Built to level the playing field — every cricketer deserves the coaching that professional teams take for granted.</p>
     </div>
-    <div class="footer-col">
-      <div class="footer-col-h">Product</div>
-      <ul>
-        <li><a href="app.html">Analyze Now</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="app.html?upgrade=1">Go Premium</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-h">Learn</div>
-      <ul>
-        <li><a href="#how">How It Works</a></li>
-        <li><a href="#compare">Compare</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#testimonials">Reviews</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-h">Legal</div>
-      <ul>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
+    <div class="fcol"><div class="fcol-h">Product</div><ul><li><a href="app.html">Analyze Now</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="app.html?upgrade=1">Go Premium</a></li></ul></div>
+    <div class="fcol"><div class="fcol-h">Learn</div><ul><li><a href="#hiw">How It Works</a></li><li><a href="#compare">Compare</a></li><li><a href="#faq">FAQ</a></li><li><a href="#testimonials">Reviews</a></li></ul></div>
+    <div class="fcol"><div class="fcol-h">Legal</div><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact</a></li></ul></div>
   </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2025 PitchIQ. Built to level the playing field.</div>
-    <div class="footer-trust">
-      <div class="trust-badge">🔒 No data collected</div>
-      <div class="trust-badge">⚡ On-device AI</div>
-      <div class="trust-badge">💳 Secure checkout</div>
-    </div>
+  <div class="fb2">
+    <div class="fcopy">© 2025 PitchIQ. Built to level the playing field.</div>
+    <div class="fbadges"><div class="fbadge">🔒 No data collected</div><div class="fbadge">⚡ On-device AI</div><div class="fbadge">💳 Secure checkout</div></div>
   </div>
 </footer>
 
 <script>
-// Scroll animations
-const obs = new IntersectionObserver(es => {
-  es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-}, { threshold: 0.07 });
-document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+// Scroll fade-in
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); }), {threshold:.07});
+document.querySelectorAll('.fu').forEach(el => obs.observe(el));
 
-// Nav background on scroll
+// Nav bg
 window.addEventListener('scroll', () => {
-  document.getElementById('main-nav').style.background =
-    window.scrollY > 50 ? 'rgba(3,6,13,0.97)' : 'rgba(3,6,13,0.80)';
-}, { passive: true });
+  document.getElementById('nav').style.background = window.scrollY > 50 ? 'rgba(2,5,9,.97)' : 'rgba(2,5,9,.82)';
+}, {passive:true});
 
 // Comparison tabs
 function switchTab(i) {
-  document.querySelectorAll('.comp-tab').forEach((t, j) => t.classList.toggle('active', j === i));
-  document.querySelectorAll('.comp-panel').forEach((p, j) => p.classList.toggle('active', j === i));
+  document.querySelectorAll('.ctab').forEach((t,j) => t.classList.toggle('on',j===i));
+  document.querySelectorAll('.cpanel').forEach((p,j) => p.classList.toggle('on',j===i));
 }
 
 // FAQ accordion
-function toggleFaq(btn) {
-  const item = btn.closest('.faq-item');
-  const ans = item.querySelector('.faq-a');
-  const isOpen = btn.classList.contains('open');
-  document.querySelectorAll('.faq-q.open').forEach(b => {
-    b.classList.remove('open');
-    b.closest('.faq-item').querySelector('.faq-a').classList.remove('open');
-  });
+function tfaq(btn) {
+  const item = btn.closest('.fq'), ans = item.querySelector('.fq-body'), isOpen = btn.classList.contains('open');
+  document.querySelectorAll('.fq-btn.open').forEach(b => { b.classList.remove('open'); b.closest('.fq').querySelector('.fq-body').classList.remove('open'); });
   if (!isOpen) { btn.classList.add('open'); ans.classList.add('open'); }
 }
+
+// Animated counters
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const dur = 2000, start = performance.now();
+  el.classList.add('counting');
+  function frame(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * ease);
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+const cObs = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { animateCounter(e.target); cObs.unobserve(e.target); }
+}), {threshold:.5});
+document.querySelectorAll('.counter[data-target]').forEach(el => cObs.observe(el));
 </script>
 </body>
 </html>
